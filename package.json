@@ -1,0 +1,34 @@
+{
+  "name": "zensegur-theme",
+  "version": "1.2.1",
+  "description": "Zensegur theme system for microfrontends",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "peerDependencies": {
+    "antd": ">=5.0.0",
+    "react": ">=16.8.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.23",
+    "typescript": "^4.9.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/azzidev/zensegur-portal-theme"
+  },
+  "keywords": [
+    "theme",
+    "zensegur",
+    "react",
+    "antd"
+  ],
+  "author": "Zensegur",
+  "license": "MIT"
+}
