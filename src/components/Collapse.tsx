@@ -75,7 +75,9 @@ export const Collapse: React.FC<CollapseProps> = ({
               <div>{item.header}</div>
               <div style={{
                 transform: isActive ? 'rotate(180deg)' : 'rotate(0deg)',
-                transition: 'transform 0.2s'
+                transition: 'transform 0.2s',
+                color: theme.colors.textSecondary,
+                userSelect: 'none'
               }}>
                 ▼
               </div>

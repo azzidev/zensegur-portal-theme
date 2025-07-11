@@ -66,6 +66,7 @@ export const Progress: React.FC<ProgressProps> = ({
               dy="0.3em"
               fontSize="24"
               fill={theme.colors.text}
+              color={theme.colors.textSecondary}
             >
               {percent}%
             </text>
