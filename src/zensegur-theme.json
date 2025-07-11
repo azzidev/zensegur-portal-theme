@@ -1,0 +1,31 @@
+{
+  "name": "Zensegur Theme Configuration",
+  "version": "1.0.0",
+  "themes": {
+    "light": {
+      "primary": "#E86412",
+      "background": "#F3F3F3",
+      "surface": "#FFFFFF",
+      "text": "#252525",
+      "textSecondary": "#A9A9A9",
+      "borderDefault": "#A9A9A9",
+      "borderActive": "#B74C00"
+    },
+    "dark": {
+      "primary": "#E86412",
+      "background": "#211A12",
+      "surface": "#2A2017",
+      "text": "#F3F3F3",
+      "textSecondary": "#C9B691",
+      "borderDefault": "#C9B691",
+      "borderActive": "#664833"
+    }
+  },
+  "usage": {
+    "description": "Configuração de tema reutilizável para microfrontends Zensegur",
+    "borderStates": {
+      "default": "Use borderDefault para estado inicial de inputs/selects",
+      "active": "Use borderActive para estado focado/selecionado"
+    }
+  }
+}

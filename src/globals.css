@@ -1,0 +1,47 @@
+/* Global theme variables */
+:root {
+  --transition-theme: all 0.3s ease;
+}
+
+[data-theme='light'] {
+  --color-primary: #E86412;
+  --color-background: #F3F3F3;
+  --color-surface: #FFFFFF;
+  --color-text: #252525;
+  --color-text-secondary: #A9A9A9;
+  --color-border: #B74C00;
+}
+
+[data-theme='dark'] {
+  --color-primary: #E86412;
+  --color-background: #211A12;
+  --color-surface: #2A2017;
+  --color-text: #F3F3F3;
+  --color-text-secondary: #C9B691;
+  --color-border: #664833;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-text);
+  transition: var(--transition-theme);
+}
+
+.zensegur-input {
+  border: 1px solid var(--color-text-secondary) !important;
+}
+
+.zensegur-input .ant-input {
+  border: none !important;
+}
+
+.zensegur-input:hover {
+  border-color: var(--color-text-secondary) !important;
+}
+
+.zensegur-input:focus,
+.zensegur-input.ant-input-focused,
+.zensegur-input.ant-input-affix-wrapper-focused {
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 2px rgba(232, 100, 18, 0.2) !important;
+}
