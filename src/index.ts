@@ -20,6 +20,7 @@ export { Image } from './components/Image';
 export { Input } from './components/Input';
 export { Modal } from './components/Modal';
 export { Progress } from './components/Progress';
+export { Result } from './components/Result';
 export { Select } from './components/Select';
 export { Skeleton } from './components/Skeleton';
 export { Spin } from './components/Spin';
