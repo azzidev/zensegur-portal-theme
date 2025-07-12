@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zensegur Theme - Exemplos</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background: #F3F3F3; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .header { text-align: center; margin-bottom: 40px; }
+        .section { background: white; border-radius: 12px; padding: 24px; margin-bottom: 24px; }
+        .component-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .example { padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px; }
+        .toggle-btn { position: fixed; top: 20px; right: 20px; z-index: 1000; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        // Theme Configuration
+        const lightTheme = {
+            mode: 'light',
+            colors: {
+                primary: '#E86412',
+                background: '#F3F3F3',
+                surface: '#FFFFFF',
+                text: '#252525',
+                textSecondary: '#A9A9A9',
+                border: '#A9A9A9',
+                error: '#F44336',
+                success: '#4CAF50',
+                warning: '#FF9800',
+                info: '#E86412',
+            }
+        };
+
+        const darkTheme = {
+            mode: 'dark',
+            colors: {
+                primary: '#E86412',
+                background: '#211A12',
+                surface: '#2A2017',
+                text: '#F3F3F3',
+                textSecondary: '#C9B691',
+                border: '#C9B691',
+                error: '#FF4D4F',
+                success: '#52C41A',
+                warning: '#FAAD14',
+                info: '#E86412',
+            }
+        };
+
+        // Theme Context
+        const ThemeContext = React.createContext();
+        const useTheme = () => React.useContext(ThemeContext);
+
+        // Components
+        const Button = ({ children, type = 'primary', ...props }) => {
+            const { theme } = useTheme();
+            const style = {
+                padding: '12px 24px',
+                borderRadius: '20px',
+                border: 'none',
+                fontFamily: 'Poppins',
+                fontWeight: 700,
+                fontSize: '14px',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+                backgroundColor: type === 'primary' ? theme.colors.primary : 'transparent',
+                color: type === 'primary' ? theme.colors.surface : theme.colors.primary,
+                border: type === 'secondary' ? `1px solid ${theme.colors.primary}` : 'none',
+            };
+            return <button style={style} {...props}>{children}</button>;
+        };
+
+        const Alert = ({ type = 'info', message, description }) => {
+            const { theme } = useTheme();
+            const colors = {
+                success: theme.colors.success,
+                info: theme.colors.info,
+                warning: theme.colors.warning,
+                error: theme.colors.error
+            };
+            
+            return (
+                <div style={{
+                    padding: '12px 16px',
+                    borderRadius: '6px',
+                    border: `1px solid ${colors[type]}20`,
+                    backgroundColor: `${colors[type]}10`,
+                    marginBottom: '12px'
+                }}>
+                    <div style={{ color: colors[type], fontWeight: 500, marginBottom: description ? '4px' : 0 }}>
+                        {message}
+                    </div>
+                    {description && (
+                        <div style={{ color: theme.colors.textSecondary, fontSize: '14px' }}>
+                            {description}
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        const Card = ({ title, children }) => {
+            const { theme } = useTheme();
+            return (
+                <div style={{
+                    backgroundColor: theme.colors.surface,
+                    border: `1px solid ${theme.colors.border}`,
+                    borderRadius: '8px',
+                    overflow: 'hidden'
+                }}>
+                    {title && (
+                        <div style={{
+                            padding: '16px 20px',
+                            borderBottom: `1px solid ${theme.colors.border}`,
+                            fontWeight: 600,
+                            color: theme.colors.text
+                        }}>
+                            {title}
+                        </div>
+                    )}
+                    <div style={{ padding: '20px' }}>
+                        {children}
+                    </div>
+                </div>
+            );
+        };
+
+        const Badge = ({ count = 0, children }) => {
+            const { theme } = useTheme();
+            return (
+                <span style={{ position: 'relative', display: 'inline-block' }}>
+                    {children}
+                    {count > 0 && (
+                        <span style={{
+                            position: 'absolute',
+                            top: 0,
+                            right: 0,
+                            backgroundColor: theme.colors.error,
+                            color: 'white',
+                            borderRadius: '9px',
+                            fontSize: '11px',
+                            fontWeight: 500,
+                            minWidth: '18px',
+                            height: '18px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            transform: 'translate(50%, -50%)'
+                        }}>
+                            {count > 99 ? '99+' : count}
+                        </span>
+                    )}
+                </span>
+            );
+        };
+
+        // Main App
+        const App = () => {
+            const [mode, setMode] = React.useState('light');
+            const theme = mode === 'light' ? lightTheme : darkTheme;
+
+            React.useEffect(() => {
+                document.body.style.backgroundColor = theme.colors.background;
+                document.body.style.color = theme.colors.text;
+            }, [theme]);
+
+            return (
+                <ThemeContext.Provider value={{ theme, mode }}>
+                    <div className="container">
+                        <button 
+                            className="toggle-btn"
+                            onClick={() => setMode(mode === 'light' ? 'dark' : 'light')}
+                            style={{
+                                padding: '8px 16px',
+                                borderRadius: '20px',
+                                border: 'none',
+                                backgroundColor: theme.colors.primary,
+                                color: theme.colors.surface,
+                                cursor: 'pointer'
+                            }}
+                        >
+                            {mode === 'light' ? '🌙' : '☀️'} {mode === 'light' ? 'Dark' : 'Light'}
+                        </button>
+
+                        <div className="header">
+                            <h1 style={{ color: theme.colors.primary, marginBottom: '8px' }}>
+                                Zensegur Theme System
+                            </h1>
+                            <p style={{ color: theme.colors.textSecondary }}>
+                                Exemplos dos componentes do sistema de tema
+                            </p>
+                        </div>
+
+                        <div className="section" style={{ backgroundColor: theme.colors.surface }}>
+                            <h2 style={{ color: theme.colors.text, marginBottom: '20px' }}>Buttons</h2>
+                            <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                                <Button type="primary">Primary Button</Button>
+                                <Button type="secondary">Secondary Button</Button>
+                            </div>
+                        </div>
+
+                        <div className="section" style={{ backgroundColor: theme.colors.surface }}>
+                            <h2 style={{ color: theme.colors.text, marginBottom: '20px' }}>Alerts</h2>
+                            <Alert type="success" message="Sucesso!" description="Operação realizada com sucesso." />
+                            <Alert type="info" message="Informação" description="Esta é uma mensagem informativa." />
+                            <Alert type="warning" message="Atenção" description="Verifique os dados antes de continuar." />
+                            <Alert type="error" message="Erro" description="Ocorreu um erro durante a operação." />
+                        </div>
+
+                        <div className="section" style={{ backgroundColor: theme.colors.surface }}>
+                            <h2 style={{ color: theme.colors.text, marginBottom: '20px' }}>Cards</h2>
+                            <div className="component-grid">
+                                <Card title="Card Exemplo 1">
+                                    <p style={{ color: theme.colors.text }}>
+                                        Este é um exemplo de card com título e conteúdo.
+                                    </p>
+                                </Card>
+                                <Card title="Card Exemplo 2">
+                                    <p style={{ color: theme.colors.text }}>
+                                        Outro exemplo de card demonstrando a consistência do tema.
+                                    </p>
+                                </Card>
+                            </div>
+                        </div>
+
+                        <div className="section" style={{ backgroundColor: theme.colors.surface }}>
+                            <h2 style={{ color: theme.colors.text, marginBottom: '20px' }}>Badges</h2>
+                            <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+                                <Badge count={5}>
+                                    <div style={{ 
+                                        padding: '8px 16px', 
+                                        backgroundColor: theme.colors.border, 
+                                        borderRadius: '4px',
+                                        color: theme.colors.text
+                                    }}>
+                                        Mensagens
+                                    </div>
+                                </Badge>
+                                <Badge count={99}>
+                                    <div style={{ 
+                                        padding: '8px 16px', 
+                                        backgroundColor: theme.colors.border, 
+                                        borderRadius: '4px',
+                                        color: theme.colors.text
+                                    }}>
+                                        Notificações
+                                    </div>
+                                </Badge>
+                                <Badge count={100}>
+                                    <div style={{ 
+                                        padding: '8px 16px', 
+                                        backgroundColor: theme.colors.border, 
+                                        borderRadius: '4px',
+                                        color: theme.colors.text
+                                    }}>
+                                        Tarefas
+                                    </div>
+                                </Badge>
+                            </div>
+                        </div>
+
+                        <div className="section" style={{ backgroundColor: theme.colors.surface }}>
+                            <h2 style={{ color: theme.colors.text, marginBottom: '20px' }}>Paleta de Cores</h2>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
+                                {Object.entries(theme.colors).map(([name, color]) => (
+                                    <div key={name} style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '12px',
+                                        padding: '12px',
+                                        border: `1px solid ${theme.colors.border}`,
+                                        borderRadius: '8px'
+                                    }}>
+                                        <div style={{
+                                            width: '40px',
+                                            height: '40px',
+                                            backgroundColor: color,
+                                            borderRadius: '4px',
+                                            border: `1px solid ${theme.colors.border}`
+                                        }}></div>
+                                        <div>
+                                            <div style={{ fontWeight: 600, color: theme.colors.text }}>{name}</div>
+                                            <div style={{ fontSize: '12px', color: theme.colors.textSecondary }}>{color}</div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </ThemeContext.Provider>
+            );
+        };
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
