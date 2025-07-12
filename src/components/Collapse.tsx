@@ -79,7 +79,7 @@ export const Collapse: React.FC<CollapseProps> = ({
                 color: theme.colors.textSecondary,
                 userSelect: 'none'
               }}>
-                ▼
+                ▾
               </div>
             </div>
             {isActive && (
