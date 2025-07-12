@@ -17,6 +17,14 @@
         .component-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
         .example { padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px; }
         .toggle-btn { position: fixed; top: 20px; right: 20px; z-index: 1000; }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
@@ -163,6 +171,835 @@
             );
         };
 
+        const Input = ({ placeholder, value, onChange, ...props }) => {
+            const { theme } = useTheme();
+            const [focused, setFocused] = React.useState(false);
+            return (
+                <input
+                    placeholder={placeholder}
+                    value={value}
+                    onChange={onChange}
+                    onFocus={() => setFocused(true)}
+                    onBlur={() => setFocused(false)}
+                    style={{
+                        width: '100%',
+                        height: '56px',
+                        padding: '16px',
+                        borderRadius: '12px',
+                        border: `1px solid ${focused ? theme.colors.primary : theme.colors.border}`,
+                        backgroundColor: theme.colors.surface,
+                        color: theme.colors.text,
+                        fontSize: '16px',
+                        fontFamily: 'Poppins',
+                        outline: 'none',
+                        transition: 'all 0.3s ease',
+                        boxShadow: focused ? `0 0 0 2px rgba(232, 100, 18, 0.2)` : 'none'
+                    }}
+                    {...props}
+                />
+            );
+        };
+
+        const Switch = ({ checked, onChange }) => {
+            const { theme } = useTheme();
+            const [isChecked, setIsChecked] = React.useState(checked || false);
+            
+            const handleClick = () => {
+                const newValue = !isChecked;
+                setIsChecked(newValue);
+                onChange?.(newValue);
+            };
+
+            return (
+                <div
+                    onClick={handleClick}
+                    style={{
+                        width: '44px',
+                        height: '22px',
+                        backgroundColor: isChecked ? theme.colors.primary : theme.colors.border,
+                        borderRadius: '11px',
+                        position: 'relative',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s'
+                    }}
+                >
+                    <div style={{
+                        width: '18px',
+                        height: '18px',
+                        backgroundColor: theme.colors.surface,
+                        borderRadius: '50%',
+                        position: 'absolute',
+                        top: '2px',
+                        left: isChecked ? '24px' : '2px',
+                        transition: 'all 0.2s',
+                        boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+                    }} />
+                </div>
+            );
+        };
+
+        const Progress = ({ percent }) => {
+            const { theme } = useTheme();
+            return (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div style={{
+                        flex: 1,
+                        height: '8px',
+                        backgroundColor: theme.colors.border,
+                        borderRadius: '4px',
+                        overflow: 'hidden'
+                    }}>
+                        <div style={{
+                            height: '100%',
+                            width: `${percent}%`,
+                            backgroundColor: theme.colors.primary,
+                            transition: 'width 0.3s ease'
+                        }} />
+                    </div>
+                    <span style={{ 
+                        fontSize: '14px', 
+                        color: theme.colors.text,
+                        minWidth: '40px'
+                    }}>
+                        {percent}%
+                    </span>
+                </div>
+            );
+        };
+
+        const Tag = ({ children, color }) => {
+            const { theme } = useTheme();
+            return (
+                <span style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    padding: '2px 8px',
+                    borderRadius: '4px',
+                    fontSize: '12px',
+                    fontWeight: 500,
+                    backgroundColor: color ? `${color}20` : theme.colors.border,
+                    color: color || theme.colors.text,
+                    border: `1px solid ${color ? `${color}40` : theme.colors.border}`
+                }}>
+                    {children}
+                </span>
+            );
+        };
+
+        const Avatar = ({ src, size = 40, children }) => {
+            const { theme } = useTheme();
+            return (
+                <div style={{
+                    width: size,
+                    height: size,
+                    borderRadius: '50%',
+                    backgroundColor: theme.colors.primary,
+                    color: theme.colors.surface,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: size * 0.4,
+                    fontWeight: 600,
+                    backgroundImage: src ? `url(${src})` : 'none',
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center'
+                }}>
+                    {!src && children}
+                </div>
+            );
+        };
+
+        const Checkbox = ({ checked, onChange, children }) => {
+            const { theme } = useTheme();
+            const [isChecked, setIsChecked] = React.useState(checked || false);
+            
+            const handleChange = () => {
+                const newValue = !isChecked;
+                setIsChecked(newValue);
+                onChange?.(newValue);
+            };
+
+            return (
+                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+                    <div
+                        onClick={handleChange}
+                        style={{
+                            width: '16px',
+                            height: '16px',
+                            border: `2px solid ${isChecked ? theme.colors.primary : theme.colors.border}`,
+                            borderRadius: '2px',
+                            backgroundColor: isChecked ? theme.colors.primary : 'transparent',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            color: theme.colors.surface,
+                            fontSize: '10px'
+                        }}
+                    >
+                        {isChecked && '✓'}
+                    </div>
+                    <span style={{ color: theme.colors.text }}>{children}</span>
+                </label>
+            );
+        };
+
+        const Divider = ({ children }) => {
+            const { theme } = useTheme();
+            return (
+                <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    margin: '16px 0',
+                    color: theme.colors.textSecondary,
+                    fontSize: '14px'
+                }}>
+                    <div style={{ flex: 1, height: '1px', backgroundColor: theme.colors.border }}></div>
+                    {children && (
+                        <>
+                            <span style={{ padding: '0 16px' }}>{children}</span>
+                            <div style={{ flex: 1, height: '1px', backgroundColor: theme.colors.border }}></div>
+                        </>
+                    )}
+                </div>
+            );
+        };
+
+        const Dropdown = ({ trigger, items }) => {
+            const { theme } = useTheme();
+            const [open, setOpen] = React.useState(false);
+            
+            return (
+                <div style={{ position: 'relative', display: 'inline-block' }}>
+                    <div onClick={() => setOpen(!open)} style={{ cursor: 'pointer' }}>
+                        {trigger}
+                    </div>
+                    {open && (
+                        <div style={{
+                            position: 'absolute',
+                            top: '100%',
+                            left: 0,
+                            backgroundColor: theme.colors.surface,
+                            border: `1px solid ${theme.colors.border}`,
+                            borderRadius: '6px',
+                            boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                            zIndex: 1000,
+                            minWidth: '120px'
+                        }}>
+                            {items.map((item, index) => (
+                                <div
+                                    key={index}
+                                    onClick={() => { item.onClick?.(); setOpen(false); }}
+                                    style={{
+                                        padding: '8px 12px',
+                                        cursor: 'pointer',
+                                        color: theme.colors.text,
+                                        borderBottom: index < items.length - 1 ? `1px solid ${theme.colors.border}` : 'none'
+                                    }}
+                                >
+                                    {item.label}
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        const Empty = ({ description = 'Nenhum dado encontrado' }) => {
+            const { theme } = useTheme();
+            return (
+                <div style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '48px 24px',
+                    color: theme.colors.textSecondary
+                }}>
+                    <div style={{ fontSize: '48px', marginBottom: '16px' }}>📭</div>
+                    <div>{description}</div>
+                </div>
+            );
+        };
+
+        const Skeleton = ({ width = '100%', height = '20px' }) => {
+            const { theme } = useTheme();
+            return (
+                <div style={{
+                    width,
+                    height,
+                    backgroundColor: theme.colors.border,
+                    borderRadius: '4px',
+                    animation: 'pulse 1.5s ease-in-out infinite'
+                }}></div>
+            );
+        };
+
+        const Spin = ({ children, spinning = false }) => {
+            const { theme } = useTheme();
+            return (
+                <div style={{ position: 'relative' }}>
+                    {spinning && (
+                        <div style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            backgroundColor: 'rgba(255,255,255,0.8)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            zIndex: 10
+                        }}>
+                            <div style={{
+                                width: '20px',
+                                height: '20px',
+                                border: `2px solid ${theme.colors.border}`,
+                                borderTop: `2px solid ${theme.colors.primary}`,
+                                borderRadius: '50%',
+                                animation: 'spin 1s linear infinite'
+                            }}></div>
+                        </div>
+                    )}
+                    {children}
+                </div>
+            );
+        };
+
+        const Select = ({ options, placeholder, onChange }) => {
+            const { theme } = useTheme();
+            const [open, setOpen] = React.useState(false);
+            const [selected, setSelected] = React.useState(null);
+            
+            const handleSelect = (option) => {
+                setSelected(option);
+                onChange?.(option);
+                setOpen(false);
+            };
+
+            return (
+                <div style={{ position: 'relative' }}>
+                    <div
+                        onClick={() => setOpen(!open)}
+                        style={{
+                            width: '100%',
+                            height: '40px',
+                            padding: '8px 12px',
+                            border: `1px solid ${theme.colors.border}`,
+                            borderRadius: '6px',
+                            backgroundColor: theme.colors.surface,
+                            color: theme.colors.text,
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between'
+                        }}
+                    >
+                        <span>{selected?.label || placeholder}</span>
+                        <span>▼</span>
+                    </div>
+                    {open && (
+                        <div style={{
+                            position: 'absolute',
+                            top: '100%',
+                            left: 0,
+                            right: 0,
+                            backgroundColor: theme.colors.surface,
+                            border: `1px solid ${theme.colors.border}`,
+                            borderRadius: '6px',
+                            boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                            zIndex: 1000,
+                            maxHeight: '200px',
+                            overflowY: 'auto'
+                        }}>
+                            {options.map((option, index) => (
+                                <div
+                                    key={index}
+                                    onClick={() => handleSelect(option)}
+                                    style={{
+                                        padding: '8px 12px',
+                                        cursor: 'pointer',
+                                        color: theme.colors.text,
+                                        borderBottom: index < options.length - 1 ? `1px solid ${theme.colors.border}` : 'none'
+                                    }}
+                                >
+                                    {option.label}
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        const Tabs = ({ items, defaultActiveKey }) => {
+            const { theme } = useTheme();
+            const [activeKey, setActiveKey] = React.useState(defaultActiveKey || items[0]?.key);
+            const activeItem = items.find(item => item.key === activeKey);
+
+            return (
+                <div>
+                    <div style={{
+                        borderBottom: `1px solid ${theme.colors.border}`,
+                        marginBottom: '20px'
+                    }}>
+                        <div style={{ display: 'flex', gap: '0' }}>
+                            {items.map(item => (
+                                <button
+                                    key={item.key}
+                                    onClick={() => setActiveKey(item.key)}
+                                    style={{
+                                        padding: '12px 20px',
+                                        border: 'none',
+                                        backgroundColor: 'transparent',
+                                        color: activeKey === item.key ? theme.colors.primary : theme.colors.textSecondary,
+                                        fontFamily: 'Poppins',
+                                        fontSize: '14px',
+                                        fontWeight: activeKey === item.key ? 600 : 400,
+                                        cursor: 'pointer',
+                                        borderBottom: activeKey === item.key ? `2px solid ${theme.colors.primary}` : '2px solid transparent',
+                                        transition: 'all 0.3s ease'
+                                    }}
+                                >
+                                    {item.tab}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                    <div>{activeItem?.children}</div>
+                </div>
+            );
+        };
+
+        const Table = ({ columns, data }) => {
+            const { theme } = useTheme();
+            return (
+                <div style={{
+                    border: `1px solid ${theme.colors.border}`,
+                    borderRadius: '6px',
+                    overflow: 'hidden'
+                }}>
+                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                        <thead>
+                            <tr style={{ backgroundColor: theme.colors.background }}>
+                                {columns.map((col, index) => (
+                                    <th key={index} style={{
+                                        padding: '12px',
+                                        textAlign: 'left',
+                                        color: theme.colors.text,
+                                        fontWeight: 600,
+                                        borderBottom: `1px solid ${theme.colors.border}`
+                                    }}>
+                                        {col.title}
+                                    </th>
+                                ))}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {data.map((row, rowIndex) => (
+                                <tr key={rowIndex}>
+                                    {columns.map((col, colIndex) => (
+                                        <td key={colIndex} style={{
+                                            padding: '12px',
+                                            color: theme.colors.text,
+                                            borderBottom: rowIndex < data.length - 1 ? `1px solid ${theme.colors.border}` : 'none'
+                                        }}>
+                                            {row[col.dataIndex]}
+                                        </td>
+                                    ))}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            );
+        };
+
+        const Collapse = ({ items }) => {
+            const { theme } = useTheme();
+            const [activeKeys, setActiveKeys] = React.useState([]);
+            
+            const handleToggle = (key) => {
+                setActiveKeys(prev => 
+                    prev.includes(key) 
+                        ? prev.filter(k => k !== key)
+                        : [...prev, key]
+                );
+            };
+
+            return (
+                <div style={{
+                    border: `1px solid ${theme.colors.border}`,
+                    borderRadius: '6px',
+                    overflow: 'hidden'
+                }}>
+                    {items.map((item, index) => {
+                        const isActive = activeKeys.includes(item.key);
+                        const isLast = index === items.length - 1;
+                        
+                        return (
+                            <div key={item.key}>
+                                <div
+                                    onClick={() => handleToggle(item.key)}
+                                    style={{
+                                        padding: '12px 16px',
+                                        backgroundColor: theme.colors.surface,
+                                        borderBottom: !isLast ? `1px solid ${theme.colors.border}` : 'none',
+                                        cursor: 'pointer',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'space-between',
+                                        color: theme.colors.text
+                                    }}
+                                >
+                                    <div>{item.header}</div>
+                                    <div style={{
+                                        transform: isActive ? 'rotate(180deg)' : 'rotate(0deg)',
+                                        transition: 'transform 0.2s'
+                                    }}>
+                                        ▼
+                                    </div>
+                                </div>
+                                {isActive && (
+                                    <div style={{
+                                        padding: '16px',
+                                        backgroundColor: theme.colors.background,
+                                        borderBottom: !isLast ? `1px solid ${theme.colors.border}` : 'none',
+                                        color: theme.colors.text
+                                    }}>
+                                        {item.children}
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    })}
+                </div>
+            );
+        };
+
+        const Container = ({ children, maxWidth = '1200px' }) => {
+            const { theme } = useTheme();
+            return (
+                <div style={{
+                    maxWidth,
+                    margin: '0 auto',
+                    padding: '0 20px',
+                    width: '100%'
+                }}>
+                    {children}
+                </div>
+            );
+        };
+
+        const Flex = ({ children, direction = 'row', justify = 'flex-start', align = 'stretch', gap = '0', wrap = 'nowrap' }) => {
+            return (
+                <div style={{
+                    display: 'flex',
+                    flexDirection: direction,
+                    justifyContent: justify,
+                    alignItems: align,
+                    gap,
+                    flexWrap: wrap
+                }}>
+                    {children}
+                </div>
+            );
+        };
+
+        const Image = ({ src, alt, width, height, fallback }) => {
+            const { theme } = useTheme();
+            const [error, setError] = React.useState(false);
+            
+            if (error && fallback) {
+                return fallback;
+            }
+            
+            return (
+                <img
+                    src={src}
+                    alt={alt}
+                    width={width}
+                    height={height}
+                    onError={() => setError(true)}
+                    style={{
+                        maxWidth: '100%',
+                        height: 'auto',
+                        borderRadius: '4px'
+                    }}
+                />
+            );
+        };
+
+        const Link = ({ href, children, target, disabled }) => {
+            const { theme } = useTheme();
+            return (
+                <a
+                    href={disabled ? undefined : href}
+                    target={target}
+                    style={{
+                        color: disabled ? theme.colors.textSecondary : theme.colors.primary,
+                        textDecoration: 'none',
+                        cursor: disabled ? 'not-allowed' : 'pointer',
+                        opacity: disabled ? 0.6 : 1
+                    }}
+                    onClick={disabled ? (e) => e.preventDefault() : undefined}
+                >
+                    {children}
+                </a>
+            );
+        };
+
+        const Modal = ({ open, title, children, onClose, footer }) => {
+            const { theme } = useTheme();
+            
+            if (!open) return null;
+            
+            return (
+                <div style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    backgroundColor: 'rgba(0,0,0,0.5)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    zIndex: 1000
+                }}>
+                    <div style={{
+                        backgroundColor: theme.colors.surface,
+                        borderRadius: '8px',
+                        maxWidth: '500px',
+                        width: '90%',
+                        maxHeight: '80vh',
+                        overflow: 'auto'
+                    }}>
+                        {title && (
+                            <div style={{
+                                padding: '16px 20px',
+                                borderBottom: `1px solid ${theme.colors.border}`,
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center'
+                            }}>
+                                <h3 style={{ color: theme.colors.text, margin: 0 }}>{title}</h3>
+                                <button
+                                    onClick={onClose}
+                                    style={{
+                                        background: 'none',
+                                        border: 'none',
+                                        fontSize: '20px',
+                                        cursor: 'pointer',
+                                        color: theme.colors.textSecondary
+                                    }}
+                                >
+                                    ×
+                                </button>
+                            </div>
+                        )}
+                        <div style={{ padding: '20px' }}>
+                            {children}
+                        </div>
+                        {footer && (
+                            <div style={{
+                                padding: '16px 20px',
+                                borderTop: `1px solid ${theme.colors.border}`,
+                                display: 'flex',
+                                justifyContent: 'flex-end',
+                                gap: '8px'
+                            }}>
+                                {footer}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        };
+
+        const Drawer = ({ open, title, children, onClose, placement = 'right' }) => {
+            const { theme } = useTheme();
+            
+            if (!open) return null;
+            
+            const isHorizontal = placement === 'left' || placement === 'right';
+            
+            return (
+                <div style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    backgroundColor: 'rgba(0,0,0,0.5)',
+                    zIndex: 1000
+                }}>
+                    <div style={{
+                        position: 'absolute',
+                        [placement]: 0,
+                        top: isHorizontal ? 0 : undefined,
+                        bottom: isHorizontal ? 0 : undefined,
+                        left: placement === 'top' || placement === 'bottom' ? 0 : undefined,
+                        right: placement === 'top' || placement === 'bottom' ? 0 : undefined,
+                        width: isHorizontal ? '400px' : '100%',
+                        height: isHorizontal ? '100%' : '400px',
+                        backgroundColor: theme.colors.surface,
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
+                    }}>
+                        {title && (
+                            <div style={{
+                                padding: '16px 20px',
+                                borderBottom: `1px solid ${theme.colors.border}`,
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center'
+                            }}>
+                                <h3 style={{ color: theme.colors.text, margin: 0 }}>{title}</h3>
+                                <button
+                                    onClick={onClose}
+                                    style={{
+                                        background: 'none',
+                                        border: 'none',
+                                        fontSize: '20px',
+                                        cursor: 'pointer',
+                                        color: theme.colors.textSecondary
+                                    }}
+                                >
+                                    ×
+                                </button>
+                            </div>
+                        )}
+                        <div style={{ padding: '20px', height: 'calc(100% - 60px)', overflow: 'auto' }}>
+                            {children}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const Result = ({ status, title, subTitle, extra, icon }) => {
+            const { theme } = useTheme();
+            const getStatusIcon = () => {
+                if (icon) return icon;
+                switch (status) {
+                    case '404': return '🔍';
+                    case '403': return '🚫';
+                    case '500': return '⚠️';
+                    case 'success': return '✅';
+                    case 'error': return '❌';
+                    case 'warning': return '⚠️';
+                    case 'info': return 'ℹ️';
+                    default: return '📄';
+                }
+            };
+
+            return (
+                <div style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '48px 24px',
+                    textAlign: 'center',
+                    minHeight: '200px'
+                }}>
+                    <div style={{
+                        fontSize: '48px',
+                        marginBottom: '24px'
+                    }}>
+                        {getStatusIcon()}
+                    </div>
+                    
+                    <h1 style={{
+                        fontSize: '24px',
+                        fontWeight: 600,
+                        color: theme.colors.text,
+                        margin: '0 0 8px 0'
+                    }}>
+                        {title}
+                    </h1>
+                    
+                    {subTitle && (
+                        <p style={{
+                            fontSize: '14px',
+                            color: theme.colors.textSecondary,
+                            margin: '0 0 24px 0',
+                            maxWidth: '400px'
+                        }}>
+                            {subTitle}
+                        </p>
+                    )}
+                    
+                    {extra && (
+                        <div>
+                            {extra}
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        const TextArea = ({ placeholder, value, onChange, rows = 4, ...props }) => {
+            const { theme } = useTheme();
+            const [focused, setFocused] = React.useState(false);
+            return (
+                <textarea
+                    placeholder={placeholder}
+                    value={value}
+                    onChange={onChange}
+                    rows={rows}
+                    onFocus={() => setFocused(true)}
+                    onBlur={() => setFocused(false)}
+                    style={{
+                        width: '100%',
+                        padding: '16px',
+                        borderRadius: '12px',
+                        border: `1px solid ${focused ? theme.colors.primary : theme.colors.border}`,
+                        backgroundColor: theme.colors.surface,
+                        color: theme.colors.text,
+                        fontSize: '16px',
+                        fontFamily: 'Poppins',
+                        outline: 'none',
+                        transition: 'all 0.3s ease',
+                        boxShadow: focused ? `0 0 0 2px rgba(232, 100, 18, 0.2)` : 'none',
+                        resize: 'vertical'
+                    }}
+                    {...props}
+                />
+            );
+        };
+
+        const Toast = ({ message, type }) => {
+            const { theme } = useTheme();
+            const getTypeColor = () => {
+                switch (type) {
+                    case 'success': return theme.colors.success;
+                    case 'error': return theme.colors.error;
+                    case 'warning': return theme.colors.warning;
+                    case 'info': return theme.colors.info;
+                    default: return theme.colors.primary;
+                }
+            };
+
+            return (
+                <div style={{
+                    backgroundColor: theme.colors.surface,
+                    color: theme.colors.text,
+                    padding: '16px 20px',
+                    borderRadius: '8px',
+                    borderLeft: `4px solid ${getTypeColor()}`,
+                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+                    maxWidth: '400px',
+                    fontFamily: 'Poppins',
+                    fontSize: '14px',
+                    marginBottom: '8px'
+                }}>
+                    {message}
+                </div>
+            );
+        };
+
         // Main App
         const App = () => {
             const [mode, setMode] = React.useState('light');
@@ -201,7 +1038,12 @@
                         </div>
 
                         <div className="section" style={{ backgroundColor: theme.colors.surface }}>
-                            <h2 style={{ color: theme.colors.text, marginBottom: '20px' }}>Buttons</h2>
+                            <h2 style={{ color: theme.colors.text, marginBottom: '20px' }}>Button</h2>
+                            <div style={{ marginBottom: '16px', padding: '12px', backgroundColor: theme.colors.background, borderRadius: '6px' }}>
+                                <code style={{ color: theme.colors.text, fontSize: '12px' }}>
+                                    type?: 'primary' | 'secondary' • onClick?: () =&gt; void • loading?: boolean • htmlType?: 'button' | 'submit'
+                                </code>
+                            </div>
                             <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
                                 <Button type="primary">Primary Button</Button>
                                 <Button type="secondary">Secondary Button</Button>
@@ -209,7 +1051,12 @@
                         </div>
 
                         <div className="section" style={{ backgroundColor: theme.colors.surface }}>
-                            <h2 style={{ color: theme.colors.text, marginBottom: '20px' }}>Alerts</h2>
+                            <h2 style={{ color: theme.colors.text, marginBottom: '20px' }}>Alert</h2>
+                            <div style={{ marginBottom: '16px', padding: '12px', backgroundColor: theme.colors.background, borderRadius: '6px' }}>
+                                <code style={{ color: theme.colors.text, fontSize: '12px' }}>
+                                    type?: 'success' | 'info' | 'warning' | 'error' • message: string • description?: string • closable?: boolean • onClose?: () =&gt; void
+                                </code>
+                            </div>
                             <Alert type="success" message="Sucesso!" description="Operação realizada com sucesso." />
                             <Alert type="info" message="Informação" description="Esta é uma mensagem informativa." />
                             <Alert type="warning" message="Atenção" description="Verifique os dados antes de continuar." />
@@ -217,7 +1064,12 @@
                         </div>
 
                         <div className="section" style={{ backgroundColor: theme.colors.surface }}>
-                            <h2 style={{ color: theme.colors.text, marginBottom: '20px' }}>Cards</h2>
+                            <h2 style={{ color: theme.colors.text, marginBottom: '20px' }}>Card</h2>
+                            <div style={{ marginBottom: '16px', padding: '12px', backgroundColor: theme.colors.background, borderRadius: '6px' }}>
+                                <code style={{ color: theme.colors.text, fontSize: '12px' }}>
+                                    title?: string • children: React.ReactNode • style?: React.CSSProperties
+                                </code>
+                            </div>
                             <div className="component-grid">
                                 <Card title="Card Exemplo 1">
                                     <p style={{ color: theme.colors.text }}>
@@ -233,7 +1085,12 @@
                         </div>
 
                         <div className="section" style={{ backgroundColor: theme.colors.surface }}>
-                            <h2 style={{ color: theme.colors.text, marginBottom: '20px' }}>Badges</h2>
+                            <h2 style={{ color: theme.colors.text, marginBottom: '20px' }}>Badge</h2>
+                            <div style={{ marginBottom: '16px', padding: '12px', backgroundColor: theme.colors.background, borderRadius: '6px' }}>
+                                <code style={{ color: theme.colors.text, fontSize: '12px' }}>
+                                    count?: number • dot?: boolean • children?: React.ReactNode • color?: string
+                                </code>
+                            </div>
                             <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
                                 <Badge count={5}>
                                     <div style={{ 
@@ -266,6 +1123,372 @@
                                     </div>
                                 </Badge>
                             </div>
+                        </div>
+
+                        <div className="section" style={{ backgroundColor: theme.colors.surface }}>
+                            <h2 style={{ color: theme.colors.text, marginBottom: '20px' }}>Input & TextArea</h2>
+                            <div style={{ marginBottom: '16px', padding: '12px', backgroundColor: theme.colors.background, borderRadius: '6px' }}>
+                                <code style={{ color: theme.colors.text, fontSize: '12px' }}>
+                                    Input: placeholder?: string • value?: string • onChange?: (e) =&gt; void • type?: 'text' | 'password' | 'email'&lt;br/&gt;
+                                    TextArea: placeholder?: string • value?: string • onChange?: (e) =&gt; void • rows?: number
+                                </code>
+                            </div>
+                            <div style={{ display: 'grid', gap: '16px' }}>
+                                <Input placeholder="Digite seu nome" />
+                                <Input placeholder="Digite seu email" type="email" />
+                                <Input placeholder="Digite sua senha" type="password" />
+                                <TextArea placeholder="Digite uma mensagem..." rows={3} />
+                            </div>
+                        </div>
+
+                        <div className="section" style={{ backgroundColor: theme.colors.surface }}>
+                            <h2 style={{ color: theme.colors.text, marginBottom: '20px' }}>Result</h2>
+                            <div style={{ marginBottom: '16px', padding: '12px', backgroundColor: theme.colors.background, borderRadius: '6px' }}>
+                                <code style={{ color: theme.colors.text, fontSize: '12px' }}>
+                                    status: '403' | '404' | '500' | 'success' | 'error' | 'warning' | 'info' • title: string • subTitle?: string • extra?: React.ReactNode • icon?: React.ReactNode
+                                </code>
+                            </div>
+                            <div className="component-grid">
+                                <Result 
+                                    status="success" 
+                                    title="Sucesso!" 
+                                    subTitle="Operação realizada com sucesso" 
+                                    extra={<Button type="primary">Continuar</Button>}
+                                />
+                                <Result 
+                                    status="404" 
+                                    title="Página não encontrada" 
+                                    subTitle="A página que você está procurando não existe" 
+                                    extra={<Button type="primary">Voltar ao início</Button>}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="section" style={{ backgroundColor: theme.colors.surface }}>
+                            <h2 style={{ color: theme.colors.text, marginBottom: '20px' }}>Toast</h2>
+                            <div style={{ marginBottom: '16px', padding: '12px', backgroundColor: theme.colors.background, borderRadius: '6px' }}>
+                                <code style={{ color: theme.colors.text, fontSize: '12px' }}>
+                                    message: string • type: 'success' | 'error' | 'warning' | 'info' • duration?: number • onClose?: () =&gt; void
+                                </code>
+                            </div>
+                            <div style={{ display: 'grid', gap: '8px' }}>
+                                <Toast message="Mensagem de sucesso!" type="success" />
+                                <Toast message="Informação importante" type="info" />
+                                <Toast message="Atenção necessária" type="warning" />
+                                <Toast message="Erro encontrado" type="error" />
+                            </div>
+                        </div>
+
+                        <div className="section" style={{ backgroundColor: theme.colors.surface }}>
+                            <h2 style={{ color: theme.colors.text, marginBottom: '20px' }}>Switch</h2>
+                            <div style={{ marginBottom: '16px', padding: '12px', backgroundColor: theme.colors.background, borderRadius: '6px' }}>
+                                <code style={{ color: theme.colors.text, fontSize: '12px' }}>
+                                    checked?: boolean • defaultChecked?: boolean • onChange?: (checked: boolean) =&gt; void • disabled?: boolean • size?: 'small' | 'default'
+                                </code>
+                            </div>
+                            <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                    <Switch />
+                                    <span style={{ color: theme.colors.text }}>Notificações</span>
+                                </div>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                    <Switch checked={true} />
+                                    <span style={{ color: theme.colors.text }}>Modo escuro</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="section" style={{ backgroundColor: theme.colors.surface }}>
+                            <h2 style={{ color: theme.colors.text, marginBottom: '20px' }}>Progress</h2>
+                            <div style={{ marginBottom: '16px', padding: '12px', backgroundColor: theme.colors.background, borderRadius: '6px' }}>
+                                <code style={{ color: theme.colors.text, fontSize: '12px' }}>
+                                    percent: number • type?: 'line' | 'circle' • status?: 'normal' | 'success' | 'exception' • showInfo?: boolean • strokeColor?: string
+                                </code>
+                            </div>
+                            <div style={{ display: 'grid', gap: '16px' }}>
+                                <Progress percent={30} />
+                                <Progress percent={65} />
+                                <Progress percent={100} />
+                            </div>
+                        </div>
+
+                        <div className="section" style={{ backgroundColor: theme.colors.surface }}>
+                            <h2 style={{ color: theme.colors.text, marginBottom: '20px' }}>Tag</h2>
+                            <div style={{ marginBottom: '16px', padding: '12px', backgroundColor: theme.colors.background, borderRadius: '6px' }}>
+                                <code style={{ color: theme.colors.text, fontSize: '12px' }}>
+                                    children: React.ReactNode • color?: string • closable?: boolean • onClose?: () =&gt; void
+                                </code>
+                            </div>
+                            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                                <Tag>Default</Tag>
+                                <Tag color={theme.colors.primary}>Primary</Tag>
+                                <Tag color={theme.colors.success}>Success</Tag>
+                                <Tag color={theme.colors.warning}>Warning</Tag>
+                                <Tag color={theme.colors.error}>Error</Tag>
+                            </div>
+                        </div>
+
+                        <div className="section" style={{ backgroundColor: theme.colors.surface }}>
+                            <h2 style={{ color: theme.colors.text, marginBottom: '20px' }}>Avatar</h2>
+                            <div style={{ marginBottom: '16px', padding: '12px', backgroundColor: theme.colors.background, borderRadius: '6px' }}>
+                                <code style={{ color: theme.colors.text, fontSize: '12px' }}>
+                                    src?: string • size?: number • children?: React.ReactNode • alt?: string
+                                </code>
+                            </div>
+                            <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+                                <Avatar size={32}>U</Avatar>
+                                <Avatar size={40}>AB</Avatar>
+                                <Avatar size={64}>ZS</Avatar>
+                                <Avatar size={80} src="https://via.placeholder.com/80" />
+                            </div>
+                        </div>
+
+                        <div className="section" style={{ backgroundColor: theme.colors.surface }}>
+                            <h2 style={{ color: theme.colors.text, marginBottom: '20px' }}>Checkbox</h2>
+                            <div style={{ marginBottom: '16px', padding: '12px', backgroundColor: theme.colors.background, borderRadius: '6px' }}>
+                                <code style={{ color: theme.colors.text, fontSize: '12px' }}>
+                                    checked?: boolean • defaultChecked?: boolean • onChange?: (checked: boolean) =&gt; void • disabled?: boolean • children: React.ReactNode
+                                </code>
+                            </div>
+                            <div style={{ display: 'grid', gap: '12px' }}>
+                                <Checkbox>Opção 1</Checkbox>
+                                <Checkbox checked={true}>Opção 2 (marcada)</Checkbox>
+                                <Checkbox>Opção 3</Checkbox>
+                            </div>
+                        </div>
+
+                        <div className="section" style={{ backgroundColor: theme.colors.surface }}>
+                            <h2 style={{ color: theme.colors.text, marginBottom: '20px' }}>Divider</h2>
+                            <div style={{ marginBottom: '16px', padding: '12px', backgroundColor: theme.colors.background, borderRadius: '6px' }}>
+                                <code style={{ color: theme.colors.text, fontSize: '12px' }}>
+                                    children?: React.ReactNode • orientation?: 'left' | 'right' | 'center' • type?: 'horizontal' | 'vertical'
+                                </code>
+                            </div>
+                            <div>
+                                <p style={{ color: theme.colors.text }}>Conteúdo acima</p>
+                                <Divider />
+                                <p style={{ color: theme.colors.text }}>Conteúdo abaixo</p>
+                                <Divider>Com texto</Divider>
+                                <p style={{ color: theme.colors.text }}>Mais conteúdo</p>
+                            </div>
+                        </div>
+
+                        <div className="section" style={{ backgroundColor: theme.colors.surface }}>
+                            <h2 style={{ color: theme.colors.text, marginBottom: '20px' }}>Dropdown</h2>
+                            <div style={{ marginBottom: '16px', padding: '12px', backgroundColor: theme.colors.background, borderRadius: '6px' }}>
+                                <code style={{ color: theme.colors.text, fontSize: '12px' }}>
+                                    trigger: React.ReactNode • items: Array&lt;{'{'}label: string, onClick?: () =&gt; void{'}'}&gt; • placement?: 'bottom' | 'top'
+                                </code>
+                            </div>
+                            <div style={{ display: 'flex', gap: '16px' }}>
+                                <Dropdown 
+                                    trigger={<Button type="secondary">Ações ▼</Button>}
+                                    items={[
+                                        { label: 'Editar', onClick: () => alert('Editar') },
+                                        { label: 'Excluir', onClick: () => alert('Excluir') },
+                                        { label: 'Visualizar', onClick: () => alert('Visualizar') }
+                                    ]}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="section" style={{ backgroundColor: theme.colors.surface }}>
+                            <h2 style={{ color: theme.colors.text, marginBottom: '20px' }}>Select</h2>
+                            <div style={{ marginBottom: '16px', padding: '12px', backgroundColor: theme.colors.background, borderRadius: '6px' }}>
+                                <code style={{ color: theme.colors.text, fontSize: '12px' }}>
+                                    options: Array&lt;{'{'}label: string, value: any{'}'}&gt; • placeholder?: string • value?: any • onChange?: (value) =&gt; void • disabled?: boolean
+                                </code>
+                            </div>
+                            <div style={{ maxWidth: '200px' }}>
+                                <Select 
+                                    placeholder="Selecione uma opção"
+                                    options={[
+                                        { label: 'Opção 1', value: '1' },
+                                        { label: 'Opção 2', value: '2' },
+                                        { label: 'Opção 3', value: '3' }
+                                    ]}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="section" style={{ backgroundColor: theme.colors.surface }}>
+                            <h2 style={{ color: theme.colors.text, marginBottom: '20px' }}>Empty</h2>
+                            <div style={{ marginBottom: '16px', padding: '12px', backgroundColor: theme.colors.background, borderRadius: '6px' }}>
+                                <code style={{ color: theme.colors.text, fontSize: '12px' }}>
+                                    description?: string • image?: React.ReactNode • children?: React.ReactNode
+                                </code>
+                            </div>
+                            <Empty description="Nenhum item encontrado" />
+                        </div>
+
+                        <div className="section" style={{ backgroundColor: theme.colors.surface }}>
+                            <h2 style={{ color: theme.colors.text, marginBottom: '20px' }}>Skeleton</h2>
+                            <div style={{ marginBottom: '16px', padding: '12px', backgroundColor: theme.colors.background, borderRadius: '6px' }}>
+                                <code style={{ color: theme.colors.text, fontSize: '12px' }}>
+                                    width?: string | number • height?: string | number • active?: boolean • loading?: boolean • children?: React.ReactNode
+                                </code>
+                            </div>
+                            <div style={{ display: 'grid', gap: '12px' }}>
+                                <Skeleton height="20px" />
+                                <Skeleton height="20px" width="80%" />
+                                <Skeleton height="20px" width="60%" />
+                            </div>
+                        </div>
+
+                        <div className="section" style={{ backgroundColor: theme.colors.surface }}>
+                            <h2 style={{ color: theme.colors.text, marginBottom: '20px' }}>Spin</h2>
+                            <div style={{ marginBottom: '16px', padding: '12px', backgroundColor: theme.colors.background, borderRadius: '6px' }}>
+                                <code style={{ color: theme.colors.text, fontSize: '12px' }}>
+                                    spinning?: boolean • size?: 'small' | 'default' | 'large' • tip?: string • children?: React.ReactNode
+                                </code>
+                            </div>
+                            <div style={{ display: 'flex', gap: '20px' }}>
+                                <Spin spinning={false}>
+                                    <div style={{ padding: '20px', color: theme.colors.text }}>Conteúdo normal</div>
+                                </Spin>
+                                <Spin spinning={true}>
+                                    <div style={{ padding: '20px', color: theme.colors.text }}>Conteúdo carregando</div>
+                                </Spin>
+                            </div>
+                        </div>
+
+                        <div className="section" style={{ backgroundColor: theme.colors.surface }}>
+                            <h2 style={{ color: theme.colors.text, marginBottom: '20px' }}>Table</h2>
+                            <div style={{ marginBottom: '16px', padding: '12px', backgroundColor: theme.colors.background, borderRadius: '6px' }}>
+                                <code style={{ color: theme.colors.text, fontSize: '12px' }}>
+                                    columns: Array&lt;{'{'}title: string, dataIndex: string, key?: string{'}'}&gt; • data: Array&lt;any&gt; • loading?: boolean • pagination?: boolean
+                                </code>
+                            </div>
+                            <Table 
+                                columns={[
+                                    { title: 'Nome', dataIndex: 'name' },
+                                    { title: 'Idade', dataIndex: 'age' },
+                                    { title: 'Cidade', dataIndex: 'city' }
+                                ]}
+                                data={[
+                                    { name: 'João', age: 25, city: 'São Paulo' },
+                                    { name: 'Maria', age: 30, city: 'Rio de Janeiro' },
+                                    { name: 'Pedro', age: 28, city: 'Belo Horizonte' }
+                                ]}
+                            />
+                        </div>
+
+                        <div className="section" style={{ backgroundColor: theme.colors.surface }}>
+                            <h2 style={{ color: theme.colors.text, marginBottom: '20px' }}>Tabs</h2>
+                            <div style={{ marginBottom: '16px', padding: '12px', backgroundColor: theme.colors.background, borderRadius: '6px' }}>
+                                <code style={{ color: theme.colors.text, fontSize: '12px' }}>
+                                    items: Array&lt;{'{'}key: string, tab: string, children: React.ReactNode{'}'}&gt; • defaultActiveKey?: string • activeKey?: string • onChange?: (key) =&gt; void
+                                </code>
+                            </div>
+                            <Tabs 
+                                items={[
+                                    { key: '1', tab: 'Tab 1', children: <div style={{ color: theme.colors.text }}>Conteúdo da Tab 1</div> },
+                                    { key: '2', tab: 'Tab 2', children: <div style={{ color: theme.colors.text }}>Conteúdo da Tab 2</div> },
+                                    { key: '3', tab: 'Tab 3', children: <div style={{ color: theme.colors.text }}>Conteúdo da Tab 3</div> }
+                                ]}
+                                defaultActiveKey="1"
+                            />
+                        </div>
+
+                        <div className="section" style={{ backgroundColor: theme.colors.surface }}>
+                            <h2 style={{ color: theme.colors.text, marginBottom: '20px' }}>Container</h2>
+                            <div style={{ marginBottom: '16px', padding: '12px', backgroundColor: theme.colors.background, borderRadius: '6px' }}>
+                                <code style={{ color: theme.colors.text, fontSize: '12px' }}>
+                                    children: React.ReactNode • maxWidth?: string • fluid?: boolean
+                                </code>
+                            </div>
+                            <Container maxWidth="600px">
+                                <div style={{ padding: '20px', backgroundColor: theme.colors.border, borderRadius: '6px', color: theme.colors.text }}>
+                                    Conteúdo dentro do container com largura máxima de 600px
+                                </div>
+                            </Container>
+                        </div>
+
+                        <div className="section" style={{ backgroundColor: theme.colors.surface }}>
+                            <h2 style={{ color: theme.colors.text, marginBottom: '20px' }}>Flex</h2>
+                            <div style={{ marginBottom: '16px', padding: '12px', backgroundColor: theme.colors.background, borderRadius: '6px' }}>
+                                <code style={{ color: theme.colors.text, fontSize: '12px' }}>
+                                    direction?: 'row' | 'column' • justify?: 'flex-start' | 'center' | 'flex-end' | 'space-between' • align?: 'stretch' | 'center' | 'flex-start' • gap?: string • wrap?: 'nowrap' | 'wrap'
+                                </code>
+                            </div>
+                            <Flex justify="space-between" align="center" gap="16px">
+                                <div style={{ padding: '12px', backgroundColor: theme.colors.primary, color: theme.colors.surface, borderRadius: '4px' }}>Item 1</div>
+                                <div style={{ padding: '12px', backgroundColor: theme.colors.success, color: theme.colors.surface, borderRadius: '4px' }}>Item 2</div>
+                                <div style={{ padding: '12px', backgroundColor: theme.colors.warning, color: theme.colors.surface, borderRadius: '4px' }}>Item 3</div>
+                            </Flex>
+                        </div>
+
+                        <div className="section" style={{ backgroundColor: theme.colors.surface }}>
+                            <h2 style={{ color: theme.colors.text, marginBottom: '20px' }}>Image</h2>
+                            <div style={{ marginBottom: '16px', padding: '12px', backgroundColor: theme.colors.background, borderRadius: '6px' }}>
+                                <code style={{ color: theme.colors.text, fontSize: '12px' }}>
+                                    src: string • alt?: string • width?: number | string • height?: number | string • fallback?: React.ReactNode • preview?: boolean
+                                </code>
+                            </div>
+                            <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+                                <Image src="https://via.placeholder.com/150" alt="Exemplo" width={150} height={150} />
+                                <Image 
+                                    src="invalid-url" 
+                                    alt="Com fallback" 
+                                    width={150} 
+                                    height={150}
+                                    fallback={<div style={{ width: '150px', height: '150px', backgroundColor: theme.colors.border, display: 'flex', alignItems: 'center', justifyContent: 'center', color: theme.colors.text }}>Erro</div>}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="section" style={{ backgroundColor: theme.colors.surface }}>
+                            <h2 style={{ color: theme.colors.text, marginBottom: '20px' }}>Link</h2>
+                            <div style={{ marginBottom: '16px', padding: '12px', backgroundColor: theme.colors.background, borderRadius: '6px' }}>
+                                <code style={{ color: theme.colors.text, fontSize: '12px' }}>
+                                    href?: string • target?: '_blank' | '_self' • disabled?: boolean • children: React.ReactNode
+                                </code>
+                            </div>
+                            <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+                                <Link href="#">Link normal</Link>
+                                <Link href="#" target="_blank">Link externo</Link>
+                                <Link disabled>Link desabilitado</Link>
+                            </div>
+                        </div>
+
+                        <div className="section" style={{ backgroundColor: theme.colors.surface }}>
+                            <h2 style={{ color: theme.colors.text, marginBottom: '20px' }}>Modal & Drawer</h2>
+                            <div style={{ marginBottom: '16px', padding: '12px', backgroundColor: theme.colors.background, borderRadius: '6px' }}>
+                                <code style={{ color: theme.colors.text, fontSize: '12px' }}>
+                                    Modal: open: boolean • title?: string • onClose?: () =&gt; void • footer?: React.ReactNode&lt;br/&gt;
+                                    Drawer: open: boolean • title?: string • onClose?: () =&gt; void • placement?: 'top' | 'right' | 'bottom' | 'left'
+                                </code>
+                            </div>
+                            <div style={{ display: 'flex', gap: '12px' }}>
+                                <Button type="primary" onClick={() => {}}>Abrir Modal (exemplo estático)</Button>
+                                <Button type="secondary" onClick={() => {}}>Abrir Drawer (exemplo estático)</Button>
+                            </div>
+                            <div style={{ marginTop: '16px', padding: '12px', backgroundColor: theme.colors.background, borderRadius: '6px', fontSize: '12px', color: theme.colors.textSecondary }}>
+                                * Modal e Drawer são componentes overlay que aparecem sobre o conteúdo
+                            </div>
+                        </div>
+
+                        <div className="section" style={{ backgroundColor: theme.colors.surface }}>
+                            <h2 style={{ color: theme.colors.text, marginBottom: '20px' }}>Collapse</h2>
+                            <div style={{ marginBottom: '16px', padding: '12px', backgroundColor: theme.colors.background, borderRadius: '6px' }}>
+                                <code style={{ color: theme.colors.text, fontSize: '12px' }}>
+                                    items: Array&lt;{'{'}key: string, header: React.ReactNode, children: React.ReactNode{'}'}&gt; • defaultActiveKey?: string[] • accordion?: boolean • onChange?: (keys) =&gt; void
+                                </code>
+                            </div>
+                            <Collapse 
+                                items={[
+                                    { 
+                                        key: '1', 
+                                        header: 'Painel 1', 
+                                        children: <div style={{ color: theme.colors.text }}>Conteúdo do painel 1</div> 
+                                    },
+                                    { 
+                                        key: '2', 
+                                        header: 'Painel 2', 
+                                        children: <div style={{ color: theme.colors.text }}>Conteúdo do painel 2</div> 
+                                    }
+                                ]}
+                            />
                         </div>
 
                         <div className="section" style={{ backgroundColor: theme.colors.surface }}>
