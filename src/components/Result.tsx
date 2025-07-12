@@ -6,29 +6,37 @@ interface ResultProps {
   title: string;
   subTitle?: string;
   extra?: React.ReactNode;
+  icon?: React.ReactNode;
 }
 
-export const Result: React.FC<ResultProps> = ({ status, title, subTitle, extra }) => {
+export const Result: React.FC<ResultProps> = ({ status, title, subTitle, extra, icon }) => {
   const { theme } = useTheme();
 
-  const getStatusIcon = () => {
+  const getDefaultIcon = () => {
+    if (icon) return icon;
+    
+    // Fallback simples sem dependência de biblioteca
+    const iconStyle = {
+      fontSize: '72px',
+      opacity: 0.6
+    };
+    
     switch (status) {
       case '403':
-        return '🚫';
-      case '404':
-        return '🔍';
-      case '500':
-        return '💥';
-      case 'success':
-        return '✅';
       case 'error':
-        return '❌';
+        return <div style={{...iconStyle, color: '#ff4d4f'}}>✕</div>;
+      case '404':
+        return <div style={{...iconStyle, color: theme.colors.textSecondary}}>?</div>;
+      case '500':
+        return <div style={{...iconStyle, color: '#ff4d4f'}}>!</div>;
+      case 'success':
+        return <div style={{...iconStyle, color: '#52c41a'}}>✓</div>;
       case 'warning':
-        return '⚠️';
+        return <div style={{...iconStyle, color: '#faad14'}}>⚠</div>;
       case 'info':
-        return 'ℹ️';
+        return <div style={{...iconStyle, color: '#1890ff'}}>i</div>;
       default:
-        return '❓';
+        return <div style={{...iconStyle, color: theme.colors.textSecondary}}>?</div>;
     }
   };
 
@@ -43,10 +51,9 @@ export const Result: React.FC<ResultProps> = ({ status, title, subTitle, extra }
       minHeight: '400px'
     }}>
       <div style={{
-        fontSize: '72px',
         marginBottom: '24px'
       }}>
-        {getStatusIcon()}
+        {getDefaultIcon()}
       </div>
       
       <h1 style={{
