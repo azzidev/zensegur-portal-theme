@@ -4,7 +4,7 @@ import { useTheme } from '../context';
 interface AvatarProps {
   src?: string;
   alt?: string;
-  size?: 'small' | 'default' | 'large';
+  size?: number | 'small' | 'default' | 'large';
   children?: React.ReactNode;
   style?: React.CSSProperties;
 }
@@ -18,15 +18,20 @@ export const Avatar: React.FC<AvatarProps> = ({
 }) => {
   const { theme } = useTheme();
   
-  const sizes = {
-    small: 24,
-    default: 32,
-    large: 40
+  const getSize = () => {
+    if (typeof size === 'number') return size;
+    const sizes = {
+      small: 24,
+      default: 32,
+      large: 40
+    };
+    return sizes[size as keyof typeof sizes];
   };
 
+  const avatarSize = getSize();
   const avatarStyle: React.CSSProperties = {
-    width: sizes[size],
-    height: sizes[size],
+    width: avatarSize,
+    height: avatarSize,
     borderRadius: '50%',
     display: 'flex',
     alignItems: 'center',
