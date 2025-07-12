@@ -12,33 +12,7 @@ interface ResultProps {
 export const Result: React.FC<ResultProps> = ({ status, title, subTitle, extra, icon }) => {
   const { theme } = useTheme();
 
-  const getDefaultIcon = () => {
-    if (icon) return icon;
-    
-    // Fallback simples sem dependência de biblioteca
-    const iconStyle = {
-      fontSize: '72px',
-      opacity: 0.6
-    };
-    
-    switch (status) {
-      case '403':
-      case 'error':
-        return <div style={{...iconStyle, color: '#ff4d4f'}}>✕</div>;
-      case '404':
-        return <div style={{...iconStyle, color: theme.colors.textSecondary}}>?</div>;
-      case '500':
-        return <div style={{...iconStyle, color: '#ff4d4f'}}>!</div>;
-      case 'success':
-        return <div style={{...iconStyle, color: '#52c41a'}}>✓</div>;
-      case 'warning':
-        return <div style={{...iconStyle, color: '#faad14'}}>⚠</div>;
-      case 'info':
-        return <div style={{...iconStyle, color: '#1890ff'}}>i</div>;
-      default:
-        return <div style={{...iconStyle, color: theme.colors.textSecondary}}>?</div>;
-    }
-  };
+  // Ícone deve ser sempre passado explicitamente
 
   return (
     <div style={{
@@ -50,11 +24,13 @@ export const Result: React.FC<ResultProps> = ({ status, title, subTitle, extra, 
       textAlign: 'center',
       minHeight: '400px'
     }}>
-      <div style={{
-        marginBottom: '24px'
-      }}>
-        {getDefaultIcon()}
-      </div>
+      {icon && (
+        <div style={{
+          marginBottom: '24px'
+        }}>
+          {icon}
+        </div>
+      )}
       
       <h1 style={{
         fontSize: '24px',
