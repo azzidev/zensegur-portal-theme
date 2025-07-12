@@ -32,3 +32,11 @@ Edite `config.ts` para personalizar cores e tokens do Ant Design.
 ## Persistência
 
 O tema é automaticamente salvo no localStorage com a chave `zensegur-theme`.
+
+### Crie uma tag para deploy
+
+Assim que você criar uma tag release, realize push e uma nova versão será gerada no NPM.
+
+```bash 
+git push origin v1.2.5.1
+```
