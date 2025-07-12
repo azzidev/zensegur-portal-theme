@@ -25,6 +25,24 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes bounce {
+            0%, 20%, 53%, 80%, 100% { transform: translate3d(0,0,0); }
+            40%, 43% { transform: translate3d(0, -8px, 0); }
+            70% { transform: translate3d(0, -4px, 0); }
+            90% { transform: translate3d(0, -2px, 0); }
+        }
     </style>
 </head>
 <body>
@@ -71,6 +89,8 @@
         // Components
         const Button = ({ children, type = 'primary', ...props }) => {
             const { theme } = useTheme();
+            const [isHovered, setIsHovered] = React.useState(false);
+            
             const style = {
                 padding: '12px 24px',
                 borderRadius: '20px',
@@ -80,11 +100,25 @@
                 fontSize: '14px',
                 cursor: 'pointer',
                 transition: 'all 0.3s ease',
-                backgroundColor: type === 'primary' ? theme.colors.primary : 'transparent',
+                backgroundColor: type === 'primary' 
+                    ? (isHovered ? `${theme.colors.primary}dd` : theme.colors.primary)
+                    : (isHovered ? `${theme.colors.primary}10` : 'transparent'),
                 color: type === 'primary' ? theme.colors.surface : theme.colors.primary,
                 border: type === 'secondary' ? `1px solid ${theme.colors.primary}` : 'none',
+                transform: isHovered ? 'translateY(-1px)' : 'translateY(0)',
+                boxShadow: isHovered ? '0 4px 8px rgba(0,0,0,0.1)' : 'none'
             };
-            return <button style={style} {...props}>{children}</button>;
+            
+            return (
+                <button 
+                    style={style} 
+                    onMouseEnter={() => setIsHovered(true)}
+                    onMouseLeave={() => setIsHovered(false)}
+                    {...props}
+                >
+                    {children}
+                </button>
+            );
         };
 
         const Alert = ({ type = 'info', message, description }) => {
@@ -244,8 +278,68 @@
             );
         };
 
-        const Progress = ({ percent }) => {
+        const Progress = ({ percent, type = 'line', status = 'normal', showInfo = true, strokeColor }) => {
             const { theme } = useTheme();
+            
+            const getColor = () => {
+                if (strokeColor) return strokeColor;
+                if (status === 'success') return theme.colors.success;
+                if (status === 'exception') return theme.colors.error;
+                return theme.colors.primary;
+            };
+
+            if (type === 'circle') {
+                const size = 120;
+                const strokeWidth = 6;
+                const radius = (size - strokeWidth) / 2;
+                const circumference = 2 * Math.PI * radius;
+                const strokeDasharray = circumference;
+                const strokeDashoffset = circumference - (percent / 100) * circumference;
+
+                return (
+                    <div style={{ display: 'inline-block', position: 'relative' }}>
+                        <svg width={size} height={size}>
+                            <circle
+                                cx={size / 2}
+                                cy={size / 2}
+                                r={radius}
+                                fill="none"
+                                stroke={theme.colors.border}
+                                strokeWidth={strokeWidth}
+                            />
+                            <circle
+                                cx={size / 2}
+                                cy={size / 2}
+                                r={radius}
+                                fill="none"
+                                stroke={getColor()}
+                                strokeWidth={strokeWidth}
+                                strokeDasharray={strokeDasharray}
+                                strokeDashoffset={strokeDashoffset}
+                                strokeLinecap="round"
+                                transform={`rotate(-90 ${size / 2} ${size / 2})`}
+                                style={{
+                                    transition: 'stroke-dashoffset 0.6s ease'
+                                }}
+                            />
+                        </svg>
+                        {showInfo && (
+                            <div style={{
+                                position: 'absolute',
+                                top: '50%',
+                                left: '50%',
+                                transform: 'translate(-50%, -50%)',
+                                fontSize: '24px',
+                                fontWeight: 600,
+                                color: theme.colors.text
+                            }}>
+                                {percent}%
+                            </div>
+                        )}
+                    </div>
+                );
+            }
+
             return (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <div style={{
@@ -258,17 +352,19 @@
                         <div style={{
                             height: '100%',
                             width: `${percent}%`,
-                            backgroundColor: theme.colors.primary,
-                            transition: 'width 0.3s ease'
+                            backgroundColor: getColor(),
+                            transition: 'width 0.6s ease'
                         }} />
                     </div>
-                    <span style={{ 
-                        fontSize: '14px', 
-                        color: theme.colors.text,
-                        minWidth: '40px'
-                    }}>
-                        {percent}%
-                    </span>
+                    {showInfo && (
+                        <span style={{ 
+                            fontSize: '14px', 
+                            color: theme.colors.text,
+                            minWidth: '40px'
+                        }}>
+                            {percent}%
+                        </span>
+                    )}
                 </div>
             );
         };
@@ -797,7 +893,8 @@
                         maxWidth: '500px',
                         width: '90%',
                         maxHeight: '80vh',
-                        overflow: 'auto'
+                        overflow: 'auto',
+                        animation: 'slideUp 0.3s ease-out'
                     }}>
                         {title && (
                             <div style={{
@@ -868,7 +965,8 @@
                         width: isHorizontal ? '400px' : '100%',
                         height: isHorizontal ? '100%' : '400px',
                         backgroundColor: theme.colors.surface,
-                        boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                        animation: 'slideIn 0.3s ease-out'
                     }}>
                         {title && (
                             <div style={{
@@ -1056,7 +1154,8 @@
                     maxWidth: '400px',
                     fontFamily: 'Poppins',
                     fontSize: '14px',
-                    marginBottom: '8px'
+                    marginBottom: '8px',
+                    animation: 'slideIn 0.3s ease-out'
                 }}>
                     {message}
                 </div>
