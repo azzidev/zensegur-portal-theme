@@ -7,7 +7,7 @@
       "background": "#F3F3F3",
       "surface": "#FFFFFF",
       "text": "#252525",
-      "textSecondary": "#A9A9A9",
+      "textSecondary": "#8A8A8A",
       "borderDefault": "#A9A9A9",
       "borderActive": "#B74C00"
     },
@@ -17,7 +17,7 @@
       "surface": "#2A2017",
       "text": "#F3F3F3",
       "textSecondary": "#C9B691",
-      "borderDefault": "#C9B691",
+      "borderDefault": "#4A3B28",
       "borderActive": "#664833"
     }
   },

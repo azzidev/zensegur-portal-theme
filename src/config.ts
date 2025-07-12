@@ -8,7 +8,7 @@ export const lightTheme: ThemeConfig = {
     background: '#F3F3F3',
     surface: '#FFFFFF',
     text: '#252525',
-    textSecondary: '#A9A9A9',
+    textSecondary: '#8A8A8A', // Mais escuro que #A9A9A9
     border: '#A9A9A9',
     error: semanticColors.light.error,
     success: semanticColors.light.success,
@@ -25,7 +25,7 @@ export const darkTheme: ThemeConfig = {
     surface: '#2A2017',
     text: '#F3F3F3',
     textSecondary: '#C9B691',
-    border: '#C9B691',
+    border: '#4A3B28', // Meio termo entre background e textSecondary
     error: semanticColors.dark.error,
     success: semanticColors.dark.success,
     warning: semanticColors.dark.warning,
