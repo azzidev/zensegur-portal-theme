@@ -38,7 +38,8 @@ export const Modal: React.FC<ModalProps> = ({
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      zIndex: 1000
+      zIndex: 1000,
+      animation: 'fadeIn 0.3s ease-out'
     }}>
       <div style={{
         backgroundColor: theme.colors.surface,
@@ -47,7 +48,8 @@ export const Modal: React.FC<ModalProps> = ({
         maxWidth: '90vw',
         maxHeight: '90vh',
         overflow: 'hidden',
-        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)'
+        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
+        animation: 'slideUp 0.3s ease-out'
       }}>
         {title && (
           <div style={{

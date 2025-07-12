@@ -29,30 +29,9 @@ export const Skeleton: React.FC<SkeletonProps> = ({
   const skeletonStyle: React.CSSProperties = {
     backgroundColor: theme.colors.border,
     borderRadius: '4px',
-    animation: active ? 'skeleton-loading 1.4s ease-in-out infinite' : 'none',
+    animation: active ? 'pulse 1.5s ease-in-out infinite' : 'none',
     ...style
   };
-
-  const keyframes = `
-    @keyframes skeleton-loading {
-      0% { opacity: 1; }
-      50% { opacity: 0.4; }
-      100% { opacity: 1; }
-    }
-  `;
-
-  React.useEffect(() => {
-    if (active) {
-      const styleSheet = document.createElement('style');
-      styleSheet.textContent = keyframes;
-      document.head.appendChild(styleSheet);
-      return () => {
-        if (document.head.contains(styleSheet)) {
-          document.head.removeChild(styleSheet);
-        }
-      };
-    }
-  }, [active]);
 
   return (
     <div style={{ display: 'flex', gap: '12px', ...style }}>

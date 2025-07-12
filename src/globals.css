@@ -1,47 +1,47 @@
-/* Global theme variables */
-:root {
-  --transition-theme: all 0.3s ease;
+/* Animações globais para o tema Zensegur */
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-[data-theme='light'] {
-  --color-primary: #E86412;
-  --color-background: #F3F3F3;
-  --color-surface: #FFFFFF;
-  --color-text: #252525;
-  --color-text-secondary: #A9A9A9;
-  --color-border: #B74C00;
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
 
-[data-theme='dark'] {
-  --color-primary: #E86412;
-  --color-background: #211A12;
-  --color-surface: #2A2017;
-  --color-text: #F3F3F3;
-  --color-text-secondary: #C9B691;
-  --color-border: #664833;
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
 }
 
-body {
-  background-color: var(--color-background);
-  color: var(--color-text);
-  transition: var(--transition-theme);
+@keyframes slideDown {
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
 
-.zensegur-input {
-  border: 1px solid var(--color-text-secondary) !important;
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
 }
 
-.zensegur-input .ant-input {
-  border: none !important;
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
-.zensegur-input:hover {
-  border-color: var(--color-text-secondary) !important;
+@keyframes bounce {
+  0%, 20%, 53%, 80%, 100% { transform: translate3d(0,0,0); }
+  40%, 43% { transform: translate3d(0, -8px, 0); }
+  70% { transform: translate3d(0, -4px, 0); }
+  90% { transform: translate3d(0, -2px, 0); }
 }
 
-.zensegur-input:focus,
-.zensegur-input.ant-input-focused,
-.zensegur-input.ant-input-affix-wrapper-focused {
-  border-color: var(--color-primary) !important;
-  box-shadow: 0 0 0 2px rgba(232, 100, 18, 0.2) !important;
-}
+/* Classes utilitárias para animações */
+.zs-fade-in { animation: fadeIn 0.3s ease-out; }
+.zs-slide-up { animation: slideUp 0.3s ease-out; }
+.zs-slide-in { animation: slideIn 0.3s ease-out; }
+.zs-slide-down { animation: slideDown 0.3s ease-out; }
+.zs-pulse { animation: pulse 1.5s ease-in-out infinite; }
+.zs-spin { animation: spin 1s linear infinite; }
+.zs-bounce { animation: bounce 1s ease-in-out; }

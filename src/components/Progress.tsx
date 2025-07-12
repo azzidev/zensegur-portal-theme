@@ -36,7 +36,7 @@ export const Progress: React.FC<ProgressProps> = ({
     const strokeDashoffset = circumference - (percent / 100) * circumference;
 
     return (
-      <div style={{ display: 'inline-block', ...style }}>
+      <div style={{ display: 'inline-block', position: 'relative', ...style }}>
         <svg width={size} height={size}>
           <circle
             cx={size / 2}
@@ -57,21 +57,24 @@ export const Progress: React.FC<ProgressProps> = ({
             strokeDashoffset={strokeDashoffset}
             strokeLinecap="round"
             transform={`rotate(-90 ${size / 2} ${size / 2})`}
+            style={{
+              transition: 'stroke-dashoffset 0.6s ease'
+            }}
           />
-          {showInfo && (
-            <text
-              x={size / 2}
-              y={size / 2}
-              textAnchor="middle"
-              dy="0.3em"
-              fontSize="24"
-              fill={theme.colors.text}
-              color={theme.colors.textSecondary}
-            >
-              {percent}%
-            </text>
-          )}
         </svg>
+        {showInfo && (
+          <div style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            fontSize: '24px',
+            fontWeight: 600,
+            color: theme.colors.text
+          }}>
+            {percent}%
+          </div>
+        )}
       </div>
     );
   }
@@ -90,7 +93,7 @@ export const Progress: React.FC<ProgressProps> = ({
             height: '100%',
             width: `${percent}%`,
             backgroundColor: getColor(),
-            transition: 'width 0.3s ease'
+            transition: 'width 0.6s ease'
           }}
         />
       </div>
