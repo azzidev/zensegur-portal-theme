@@ -4,10 +4,11 @@ import { useTheme } from '../context';
 interface ButtonProps {
   children: React.ReactNode;
   onClick?: () => void;
-  type?: 'primary' | 'secondary';
+  type?: 'primary' | 'secondary' | 'danger';
   loading?: boolean;
   htmlType?: 'button' | 'submit';
   style?: React.CSSProperties;
+  disabled?: boolean;
 }
 
 export const Button: React.FC<ButtonProps> = ({ 
@@ -16,7 +17,8 @@ export const Button: React.FC<ButtonProps> = ({
   type = 'primary', 
   loading = false,
   htmlType = 'button',
-  style 
+  style,
+  disabled = false
 }) => {
   const { theme } = useTheme();
   const [isHovered, setIsHovered] = useState(false);
@@ -28,32 +30,44 @@ export const Button: React.FC<ButtonProps> = ({
     fontFamily: 'Poppins',
     fontWeight: 700,
     fontSize: '14px',
-    cursor: loading ? 'not-allowed' : 'pointer',
+    cursor: disabled || loading ? 'not-allowed' : 'pointer',
     transition: 'all 0.3s ease',
-    transform: isHovered && !loading ? 'translateY(-1px)' : 'translateY(0)',
-    boxShadow: isHovered && !loading ? '0 4px 8px rgba(0,0,0,0.1)' : 'none',
+    transform: isHovered && !loading && !disabled ? 'translateY(-1px)' : 'translateY(0)',
+    boxShadow: isHovered && !loading && !disabled ? '0 4px 8px rgba(0,0,0,0.1)' : 'none',
+    opacity: disabled ? 0.6 : 1,
     ...style
   };
 
-  const primaryStyle: React.CSSProperties = {
-    ...baseStyle,
-    backgroundColor: isHovered && !loading ? `${theme.colors.primary}dd` : theme.colors.primary,
-    color: theme.colors.surface,
-  };
-
-  const secondaryStyle: React.CSSProperties = {
-    ...baseStyle,
-    backgroundColor: isHovered && !loading ? `${theme.colors.primary}10` : 'transparent',
-    color: theme.colors.primary,
-    border: `1px solid ${theme.colors.primary}`,
+  const getButtonStyle = () => {
+    if (type === 'danger') {
+      return {
+        ...baseStyle,
+        backgroundColor: isHovered && !loading && !disabled ? `${theme.colors.error}dd` : theme.colors.error,
+        color: theme.colors.surface,
+      };
+    } else if (type === 'secondary') {
+      return {
+        ...baseStyle,
+        backgroundColor: isHovered && !loading && !disabled ? `${theme.colors.primary}10` : 'transparent',
+        color: theme.colors.primary,
+        border: `1px solid ${theme.colors.primary}`,
+      };
+    } else {
+      // primary
+      return {
+        ...baseStyle,
+        backgroundColor: isHovered && !loading && !disabled ? `${theme.colors.primary}dd` : theme.colors.primary,
+        color: theme.colors.surface,
+      };
+    }
   };
 
   return (
     <button
       type={htmlType}
-      style={type === 'primary' ? primaryStyle : secondaryStyle}
-      onClick={onClick}
-      disabled={loading}
+      style={getButtonStyle()}
+      onClick={disabled || loading ? undefined : onClick}
+      disabled={disabled || loading}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >

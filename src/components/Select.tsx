@@ -7,25 +7,49 @@ interface Option {
 }
 
 interface SelectProps {
-  options: Option[];
+  options?: Option[];
   value?: string | number;
   onChange?: (value: string | number) => void;
   placeholder?: string;
   style?: React.CSSProperties;
+  children?: React.ReactNode;
 }
 
-export const Select: React.FC<SelectProps> = ({
-  options,
+interface OptionProps {
+  children: React.ReactNode;
+  value: string | number;
+  key?: string;
+}
+
+interface SelectInterface extends React.FC<SelectProps> {
+  Option: React.FC<OptionProps>;
+}
+
+export const Select: SelectInterface = ({
+  options = [],
   value,
   onChange,
   placeholder = 'Selecione...',
-  style
+  style,
+  children
 }) => {
   const { theme } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
   const selectRef = useRef<HTMLDivElement>(null);
 
-  const selectedOption = options.find(opt => opt.value === value);
+  // Extrair opções de children se fornecidas
+  const childOptions: Option[] = [];
+  React.Children.forEach(children, (child) => {
+    if (React.isValidElement(child) && child.type === Select.Option) {
+      childOptions.push({
+        label: child.props.children as string,
+        value: child.props.value
+      });
+    }
+  });
+
+  const finalOptions = childOptions.length > 0 ? childOptions : options;
+  const selectedOption = finalOptions.find(opt => opt.value === value);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -87,7 +111,7 @@ export const Select: React.FC<SelectProps> = ({
           overflowY: 'auto',
           boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)'
         }}>
-          {options.map((option) => (
+          {finalOptions.map((option) => (
             <div
               key={option.value}
               onClick={() => {
@@ -119,4 +143,9 @@ export const Select: React.FC<SelectProps> = ({
       )}
     </div>
   );
+};
+
+// Implementação do Select.Option
+Select.Option = ({ children }) => {
+  return null; // Este componente é apenas para API, não renderiza nada
 };

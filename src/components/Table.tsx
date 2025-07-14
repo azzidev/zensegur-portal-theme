@@ -3,7 +3,7 @@ import { useTheme } from '../context';
 
 interface Column {
   title: string;
-  dataIndex: string;
+  dataIndex?: string;
   key?: string;
   render?: (value: any, record: any, index: number) => React.ReactNode;
   width?: string | number;
@@ -83,8 +83,8 @@ export const Table: React.FC<TableProps> = ({
                   color: theme.colors.text
                 }}>
                   {col.render 
-                    ? col.render(record[col.dataIndex], record, rowIndex)
-                    : record[col.dataIndex]
+                    ? col.render(col.dataIndex ? record[col.dataIndex] : null, record, rowIndex)
+                    : (col.dataIndex ? record[col.dataIndex] : '')
                   }
                 </td>
               ))}

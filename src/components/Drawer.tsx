@@ -2,27 +2,33 @@ import React from 'react';
 import { useTheme } from '../context';
 
 interface DrawerProps {
-  visible: boolean;
+  visible?: boolean;
+  open?: boolean;
   title?: string;
   children: React.ReactNode;
   onClose: () => void;
   placement?: 'left' | 'right' | 'top' | 'bottom';
   width?: number | string;
   height?: number | string;
+  footer?: React.ReactNode;
 }
 
 export const Drawer: React.FC<DrawerProps> = ({
   visible,
+  open,
   title,
   children,
   onClose,
   placement = 'right',
   width = 378,
-  height = 378
+  height = 378,
+  footer
 }) => {
   const { theme } = useTheme();
 
-  if (!visible) return null;
+  // Suporta tanto visible quanto open para compatibilidade
+  const isVisible = visible !== undefined ? visible : (open !== undefined ? open : false);
+  if (!isVisible) return null;
 
   const getDrawerStyle = () => {
     const baseStyle = {
@@ -119,12 +125,22 @@ export const Drawer: React.FC<DrawerProps> = ({
         
         <div style={{
           padding: '20px',
-          height: title ? 'calc(100% - 60px)' : '100%',
+          height: title ? (footer ? 'calc(100% - 120px)' : 'calc(100% - 60px)') : (footer ? 'calc(100% - 60px)' : '100%'),
           overflow: 'auto',
           color: theme.colors.text
         }}>
           {children}
         </div>
+        
+        {footer && (
+          <div style={{
+            padding: '16px 20px',
+            borderTop: `1px solid ${theme.colors.border}`,
+            color: theme.colors.text
+          }}>
+            {footer}
+          </div>
+        )}
       </div>
     </>
   );

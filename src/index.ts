@@ -18,6 +18,7 @@ export { Drawer } from './components/Drawer';
 export { Flex } from './components/Flex';
 export { Dropdown } from './components/Dropdown';
 export { Empty } from './components/Empty';
+export { Form } from './components/Form';
 export { Image } from './components/Image';
 export { Input } from './components/Input';
 export { Link } from './components/Link';
