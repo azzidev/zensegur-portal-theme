@@ -61,7 +61,7 @@ Form.Item = ({ label, name, rules, children }) => {
         <div style={{ 
           marginBottom: '8px', 
           fontWeight: 500,
-          color: theme.colors.textPrimary
+          color: theme.colors.text
         }}>
           {label}
           {rules?.some(rule => rule.required) && (
