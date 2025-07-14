@@ -33,32 +33,7 @@ export const darkTheme: ThemeConfig = {
   },
 };
 
-export const antdThemeConfig = {
-  light: {
-    algorithm: undefined,
-    token: {
-      colorPrimary: lightTheme.colors.primary,
-      colorBgBase: lightTheme.colors.background,
-      colorText: lightTheme.colors.text,
-      colorTextSecondary: lightTheme.colors.textSecondary,
-      colorBorder: lightTheme.colors.border,
-      colorPrimaryBorder: '#B74C00',
-      fontFamily: 'Poppins, -apple-system, BlinkMacSystemFont, sans-serif',
-    },
-  },
-  dark: {
-    algorithm: 'dark',
-    token: {
-      colorPrimary: darkTheme.colors.primary,
-      colorBgBase: darkTheme.colors.background,
-      colorText: darkTheme.colors.text,
-      colorTextSecondary: darkTheme.colors.textSecondary,
-      colorBorder: darkTheme.colors.border,
-      colorPrimaryBorder: '#664833',
-      fontFamily: 'Poppins, -apple-system, BlinkMacSystemFont, sans-serif',
-    },
-  },
-};
+
 
 export const zensegurThemeConfig = {
   light: {

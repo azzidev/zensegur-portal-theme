@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { ConfigProvider, theme } from 'antd';
 import { ThemeContextType, ThemeMode } from './types';
-import { lightTheme, darkTheme, antdThemeConfig } from './config';
+import { lightTheme, darkTheme } from './config';
 
 const THEME_STORAGE_KEY = 'zensegur-theme';
 
@@ -40,11 +39,6 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     document.documentElement.setAttribute('data-theme', mode);
   }, [mode]);
 
-  const antdConfig = {
-    algorithm: mode === 'dark' ? theme.darkAlgorithm : theme.defaultAlgorithm,
-    token: antdThemeConfig[mode].token,
-  };
-
   return (
     <ThemeContext.Provider value={{
       theme: currentTheme,
@@ -52,9 +46,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
       toggleTheme,
       setTheme,
     }}>
-      <ConfigProvider theme={antdConfig}>
-        {children}
-      </ConfigProvider>
+      {children}
     </ThemeContext.Provider>
   );
 };

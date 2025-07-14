@@ -21,9 +21,8 @@ const { theme, mode, toggleTheme, setTheme } = useTheme();
 Para usar em outros microfrontends:
 
 1. Copie a pasta `src/theme` para o novo projeto
-2. Instale as dependências: `antd @ant-design/icons`
-3. Importe e use o `ThemeProvider` no root
-4. Use `useTheme()` em qualquer componente
+2. Importe e use o `ThemeProvider` no root
+3. Use `useTheme()` em qualquer componente
 
 ## Personalização
 
