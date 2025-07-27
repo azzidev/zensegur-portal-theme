@@ -1162,6 +1162,115 @@
             );
         };
 
+        // InputMask Component
+        const defaultDelimiters = [',', '.', '/', '|', ';', '-', ' ', '(', ')'];
+        const defaultMaskRules = [
+            { mask: 'X', to: 'letter' },
+            { mask: '0', to: 'number' }
+        ];
+
+        const InputMask = ({ mask, value, onChange, delimiter = defaultDelimiters, maskRules = defaultMaskRules, prefix = '', placeholder, disabled = false, className }) => {
+            const [displayValue, setDisplayValue] = React.useState('');
+
+            const applyMask = (rawValue) => {
+                let maskedValue = '';
+                let rawIndex = 0;
+                
+                for (let i = 0; i < mask.length && rawIndex < rawValue.length; i++) {
+                    const maskChar = mask[i];
+                    const inputChar = rawValue[rawIndex];
+                    
+                    if (delimiter.indexOf(maskChar) !== -1) {
+                        maskedValue += maskChar;
+                        continue;
+                    }
+                    
+                    const rule = maskRules.find(r => r.mask === maskChar);
+                    
+                    if (rule) {
+                        if (rule.to === 'number' && /\d/.test(inputChar)) {
+                            maskedValue += inputChar;
+                            rawIndex++;
+                        } else if (rule.to === 'letter' && /[a-zA-Z]/.test(inputChar)) {
+                            maskedValue += inputChar;
+                            rawIndex++;
+                        } else {
+                            rawIndex++;
+                            i--;
+                        }
+                    } else {
+                        if (maskChar === inputChar) {
+                            maskedValue += inputChar;
+                            rawIndex++;
+                        } else {
+                            maskedValue += maskChar;
+                        }
+                    }
+                }
+                
+                return prefix + maskedValue;
+            };
+
+            const removeMask = (maskedValue) => {
+                let rawValue = maskedValue;
+                
+                if (prefix && rawValue.indexOf(prefix) === 0) {
+                    rawValue = rawValue.substring(prefix.length);
+                }
+                
+                delimiter.forEach(del => {
+                    rawValue = rawValue.split(del).join('');
+                });
+                
+                return rawValue;
+            };
+
+            const handleChange = (e) => {
+                const newValue = e.target.value;
+                const rawValue = removeMask(newValue);
+                const maskedValue = applyMask(rawValue);
+                
+                setDisplayValue(maskedValue);
+                
+                if (onChange) {
+                    onChange(maskedValue, rawValue);
+                }
+            };
+
+            return (
+                <Input
+                    value={displayValue}
+                    onChange={handleChange}
+                    placeholder={placeholder || mask}
+                    disabled={disabled}
+                    className={className}
+                />
+            );
+        };
+
+        const InputMaskDemo = ({ mask, placeholder }) => {
+            const { theme } = useTheme();
+            const [maskedValue, setMaskedValue] = React.useState('');
+            const [rawValue, setRawValue] = React.useState('');
+
+            return (
+                <div>
+                    <InputMask 
+                        mask={mask}
+                        placeholder={placeholder}
+                        onChange={(masked, raw) => {
+                            setMaskedValue(masked);
+                            setRawValue(raw);
+                        }}
+                    />
+                    <div style={{ marginTop: '8px', fontSize: '12px', color: theme.colors.textSecondary }}>
+                        <div>Valor com máscara: <code style={{ color: theme.colors.primary }}>{maskedValue || 'vazio'}</code></div>
+                        <div>Valor sem máscara: <code style={{ color: theme.colors.success }}>{rawValue || 'vazio'}</code></div>
+                    </div>
+                </div>
+            );
+        };
+
         // Main App
         const App = () => {
             const [mode, setMode] = React.useState('light');
@@ -1317,6 +1426,33 @@
                                 <Input placeholder="Digite seu email" type="email" />
                                 <Input placeholder="Digite sua senha" type="password" />
                                 <TextArea placeholder="Digite uma mensagem..." rows={3} />
+                            </div>
+                        </div>
+
+                        <div className="section" style={{ backgroundColor: theme.colors.surface }}>
+                            <h2 style={{ color: theme.colors.text, marginBottom: '20px' }}>InputMask</h2>
+                            <div style={{ marginBottom: '16px', padding: '12px', backgroundColor: theme.colors.background, borderRadius: '6px' }}>
+                                <code style={{ color: theme.colors.text, fontSize: '12px' }}>
+                                    mask: string • value?: string • onChange?: (masked: string, raw: string) =&gt; void • delimiter?: string[] • maskRules?: MaskRule[] • prefix?: string
+                                </code>
+                            </div>
+                            <div style={{ display: 'grid', gap: '16px' }}>
+                                <div>
+                                    <h4 style={{ color: theme.colors.text, marginBottom: '8px' }}>CPF</h4>
+                                    <InputMaskDemo mask="000.000.000-00" placeholder="000.000.000-00" />
+                                </div>
+                                <div>
+                                    <h4 style={{ color: theme.colors.text, marginBottom: '8px' }}>Telefone</h4>
+                                    <InputMaskDemo mask="(00) 00000-0000" placeholder="(00) 00000-0000" />
+                                </div>
+                                <div>
+                                    <h4 style={{ color: theme.colors.text, marginBottom: '8px' }}>CEP</h4>
+                                    <InputMaskDemo mask="00000-000" placeholder="00000-000" />
+                                </div>
+                                <div>
+                                    <h4 style={{ color: theme.colors.text, marginBottom: '8px' }}>Placa de Carro</h4>
+                                    <InputMaskDemo mask="XXX-0000" placeholder="XXX-0000" />
+                                </div>
                             </div>
                         </div>
 

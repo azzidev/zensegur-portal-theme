@@ -21,6 +21,7 @@ export { Empty } from './components/Empty';
 export { Form } from './components/Form';
 export { Image } from './components/Image';
 export { Input } from './components/Input';
+export { InputMask } from './components/InputMask';
 export { Link } from './components/Link';
 export { Modal } from './components/Modal';
 export { Progress } from './components/Progress';

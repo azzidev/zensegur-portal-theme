@@ -5,8 +5,11 @@ interface InputProps {
   placeholder?: string;
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   type?: 'text' | 'password';
   style?: React.CSSProperties;
+  disabled?: boolean;
+  className?: string;
 }
 
 interface InputInterface extends React.FC<InputProps> {
@@ -16,9 +19,12 @@ interface InputInterface extends React.FC<InputProps> {
 export const Input: InputInterface = ({ 
   placeholder, 
   value, 
-  onChange, 
+  onChange,
+  onKeyDown,
   type = 'text',
-  style 
+  style,
+  disabled = false,
+  className
 }) => {
   const { theme } = useTheme();
 
@@ -43,6 +49,9 @@ export const Input: InputInterface = ({
       placeholder={placeholder}
       value={value}
       onChange={onChange}
+      onKeyDown={onKeyDown}
+      disabled={disabled}
+      className={className}
       style={inputStyle}
       onFocus={(e) => {
         e.target.style.borderColor = theme.colors.primary;
