@@ -86,7 +86,7 @@ export const InputMask: React.FC<InputMaskProps> = ({
     let rawValue = maskedValue;
     
     // Remove prefix
-    if (prefix && rawValue.startsWith(prefix)) {
+    if (prefix && rawValue.indexOf(prefix) === 0) {
       rawValue = rawValue.substring(prefix.length);
     }
     
