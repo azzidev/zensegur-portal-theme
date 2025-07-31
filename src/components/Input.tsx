@@ -30,7 +30,7 @@ export const Input: InputInterface = ({
 
   const inputStyle: React.CSSProperties = {
     width: '100%',
-    height: '56px',
+    height: '14px',
     padding: '16px',
     borderRadius: '12px',
     border: `1px solid ${theme.colors.border}`,
@@ -85,7 +85,7 @@ Input.Password = ({
         style={{
           ...style,
           width: '100%',
-          height: '56px',
+          height: '14px',
           padding: '16px',
           paddingRight: '40px',
           borderRadius: '12px',

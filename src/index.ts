@@ -35,3 +35,4 @@ export { Tabs, TabPane } from './components/Tabs';
 export { Tag } from './components/Tag';
 export { Toast, message, useToast } from './components/Toast';
 export { ToastContainer } from './components/ToastContainer';
+export { Title, Label, Text } from './components/Typography';
