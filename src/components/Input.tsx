@@ -40,6 +40,7 @@ export const Input: InputInterface = ({
     fontFamily: 'Poppins',
     outline: 'none',
     transition: 'all 0.3s ease',
+    boxSizing: 'border-box',
     ...style
   };
 
@@ -95,7 +96,8 @@ Input.Password = ({
           fontSize: '16px',
           fontFamily: 'Poppins',
           outline: 'none',
-          transition: 'all 0.3s ease'
+          transition: 'all 0.3s ease',
+          boxSizing: 'border-box'
         }}
         onFocus={(e) => {
           e.target.style.borderColor = theme.colors.primary;
