@@ -1864,6 +1864,74 @@
                         </div>
 
                         <div className="section" style={{ backgroundColor: theme.colors.surface }}>
+                            <h2 style={{ color: theme.colors.text, marginBottom: '20px' }}>DynamicCanvas</h2>
+                            <div style={{ marginBottom: '16px', padding: '12px', backgroundColor: theme.colors.background, borderRadius: '6px' }}>
+                                <code style={{ color: theme.colors.text, fontSize: '12px' }}>
+                                    width?: number | string • height?: number | string • words?: string[] • showWords?: boolean • variant?: 'zen' | 'loading' | 'processing'
+                                </code>
+                            </div>
+                            <div style={{ marginBottom: '20px' }}>
+                                <h4 style={{ color: theme.colors.text, marginBottom: '8px' }}>Zen Variant</h4>
+                                <div style={{ height: '300px', border: `1px solid ${theme.colors.border}`, borderRadius: '8px', overflow: 'hidden' }}>
+                                    <canvas 
+                                        ref={React.useRef()}
+                                        style={{
+                                            width: '100%',
+                                            height: '100%',
+                                            background: theme.colors.surface
+                                        }}
+                                    />
+                                </div>
+                                <p style={{ color: theme.colors.textSecondary, fontSize: '14px', marginTop: '8px' }}>
+                                    Canvas animado com padrões geométricos zen e texto dinâmico. Ideal para telas de boas-vindas.
+                                </p>
+                            </div>
+                            <div style={{ marginBottom: '20px' }}>
+                                <h4 style={{ color: theme.colors.text, marginBottom: '8px' }}>Loading Variant</h4>
+                                <div style={{ height: '200px', border: `1px solid ${theme.colors.border}`, borderRadius: '8px', overflow: 'hidden' }}>
+                                    <canvas 
+                                        ref={React.useRef()}
+                                        style={{
+                                            width: '100%',
+                                            height: '100%',
+                                            background: theme.colors.surface
+                                        }}
+                                    />
+                                </div>
+                                <p style={{ color: theme.colors.textSecondary, fontSize: '14px', marginTop: '8px' }}>
+                                    Versão otimizada para estados de carregamento com menos elementos e animação mais rápida.
+                                </p>
+                            </div>
+                            <div style={{ marginBottom: '20px' }}>
+                                <h4 style={{ color: theme.colors.text, marginBottom: '8px' }}>Exemplo de Uso</h4>
+                                <div style={{ padding: '12px', backgroundColor: theme.colors.background, borderRadius: '6px' }}>
+                                    <pre style={{ color: theme.colors.text, fontSize: '12px', margin: 0, whiteSpace: 'pre-wrap' }}>
+{`// Tela de boas-vindas
+<DynamicCanvas 
+  variant="zen"
+  words={["Bem-vindo!", "Prepare-se para uma experiência única"]}
+  height={400}
+/>
+
+// Loading de relatório
+<DynamicCanvas 
+  variant="loading"
+  words={["Gerando relatório...", "Processando dados...", "Quase pronto!"]}
+  height={300}
+/>
+
+// Apenas animação (sem texto)
+<DynamicCanvas 
+  variant="processing"
+  showWords={false}
+  height={200}
+/>`}
+                                    </pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="section" style={{ backgroundColor: theme.colors.surface }}>
                             <h2 style={{ color: theme.colors.text, marginBottom: '20px' }}>Paleta de Cores</h2>
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
                                 {Object.entries(theme.colors).map(([name, color]) => (
