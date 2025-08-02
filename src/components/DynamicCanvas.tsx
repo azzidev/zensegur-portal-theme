@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { useTheme } from '../hooks/useTheme';
+import { useTheme } from '../context';
 
 interface DynamicCanvasProps {
   width?: number | string;
@@ -39,6 +39,11 @@ const DynamicCanvas: React.FC<DynamicCanvasProps> = ({
     return Math.min(Math.max(baseTime + charTime, 40), variant === 'loading' ? 120 : 200);
   };
 
+  const toHex = (num: number): string => {
+    const hex = Math.floor(num * 255).toString(16);
+    return hex.length === 1 ? '0' + hex : hex;
+  };
+
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -74,7 +79,7 @@ const DynamicCanvas: React.FC<DynamicCanvasProps> = ({
         const radius = (i * circleSpacing + Math.sin(time * speed + i * 0.5) * 15) * scale;
         const opacity = Math.abs(Math.sin(time * 0.8 * speed + i * 0.3)) * (variant === 'loading' ? 0.4 : 0.3);
         
-        ctx.strokeStyle = `${theme.colors.primary}${Math.floor(opacity * 255).toString(16).padStart(2, '0')}`;
+        ctx.strokeStyle = `${theme.colors.primary}${toHex(opacity)}`;
         ctx.lineWidth = variant === 'loading' ? 2 : 3;
         ctx.beginPath();
         ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
@@ -92,7 +97,7 @@ const DynamicCanvas: React.FC<DynamicCanvasProps> = ({
         const endX = centerX + Math.cos(angle) * length;
         const endY = centerY + Math.sin(angle) * length;
         
-        ctx.strokeStyle = `${theme.colors.primary}${Math.floor(opacity * 255).toString(16).padStart(2, '0')}`;
+        ctx.strokeStyle = `${theme.colors.primary}${toHex(opacity)}`;
         ctx.lineWidth = 2;
         ctx.beginPath();
         ctx.moveTo(startX, startY);
@@ -106,7 +111,7 @@ const DynamicCanvas: React.FC<DynamicCanvasProps> = ({
         const rotation = time * (0.1 + layer * 0.05) * speed * (layer % 2 === 0 ? 1 : -1);
         const opacity = Math.abs(Math.sin(time * 0.6 * speed + layer)) * 0.25;
         
-        ctx.strokeStyle = `${theme.colors.primary}${Math.floor(opacity * 255).toString(16).padStart(2, '0')}`;
+        ctx.strokeStyle = `${theme.colors.primary}${toHex(opacity)}`;
         ctx.lineWidth = 2;
         ctx.beginPath();
         
@@ -133,7 +138,7 @@ const DynamicCanvas: React.FC<DynamicCanvasProps> = ({
         const size = (3 + Math.sin(time * 3 * speed + i) * 1.5) * scale;
         const opacity = Math.abs(Math.cos(time * 1.5 * speed + i * 0.4)) * 0.6;
         
-        ctx.fillStyle = `${theme.colors.primary}${Math.floor(opacity * 255).toString(16).padStart(2, '0')}`;
+        ctx.fillStyle = `${theme.colors.primary}${toHex(opacity)}`;
         ctx.beginPath();
         ctx.arc(x, y, size, 0, Math.PI * 2);
         ctx.fill();
@@ -175,7 +180,7 @@ const DynamicCanvas: React.FC<DynamicCanvasProps> = ({
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
           
-          const wordOpacity = Math.floor(wordOpacityRef.current * 255).toString(16).padStart(2, '0');
+          const wordOpacity = toHex(wordOpacityRef.current);
           
           ctx.strokeStyle = `${theme.colors.surface}CC`;
           ctx.lineWidth = 3;
@@ -209,7 +214,7 @@ const DynamicCanvas: React.FC<DynamicCanvasProps> = ({
 
     resizeCanvas();
     
-    let resizeTimeout: NodeJS.Timeout;
+    let resizeTimeout: any;
     const resizeObserver = new ResizeObserver(() => {
       clearTimeout(resizeTimeout);
       resizeTimeout = setTimeout(() => {
