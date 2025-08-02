@@ -999,6 +999,97 @@
             );
         };
 
+        const DynamicCanvasDemo = ({ variant = 'zen', height = 300 }) => {
+            const { theme } = useTheme();
+            const canvasRef = React.useRef();
+            const animationRef = React.useRef();
+            const timeRef = React.useRef(0);
+            
+            React.useEffect(() => {
+                const canvas = canvasRef.current;
+                if (!canvas) return;
+                const ctx = canvas.getContext('2d');
+                if (!ctx) return;
+                
+                const resizeCanvas = () => {
+                    const rect = canvas.getBoundingClientRect();
+                    canvas.width = rect.width;
+                    canvas.height = rect.height;
+                };
+                
+                const animate = () => {
+                    const time = timeRef.current * 0.01;
+                    const centerX = canvas.width / 2;
+                    const centerY = canvas.height / 2;
+                    const scale = Math.min(canvas.width, canvas.height) / 600;
+                    
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    
+                    const circleCount = variant === 'loading' ? 6 : 8;
+                    for (let i = 1; i <= circleCount; i++) {
+                        const radius = (i * 40 + Math.sin(time + i * 0.5) * 15) * scale;
+                        const opacity = Math.abs(Math.sin(time * 0.8 + i * 0.3)) * 0.3;
+                        const hex = Math.floor(opacity * 255).toString(16);
+                        const hexPadded = hex.length === 1 ? '0' + hex : hex;
+                        
+                        ctx.strokeStyle = `${theme.colors.primary}${hexPadded}`;
+                        ctx.lineWidth = 2;
+                        ctx.beginPath();
+                        ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+                        ctx.stroke();
+                    }
+                    
+                    const lineCount = variant === 'loading' ? 6 : 8;
+                    for (let i = 0; i < lineCount; i++) {
+                        const angle = (i / lineCount) * Math.PI * 2 + time * 0.2;
+                        const length = (100 + Math.sin(time * 2 + i) * 30) * scale;
+                        const opacity = Math.abs(Math.cos(time + i * 0.2)) * 0.4;
+                        const hex = Math.floor(opacity * 255).toString(16);
+                        const hexPadded = hex.length === 1 ? '0' + hex : hex;
+                        
+                        const startX = centerX + Math.cos(angle) * 30 * scale;
+                        const startY = centerY + Math.sin(angle) * 30 * scale;
+                        const endX = centerX + Math.cos(angle) * length;
+                        const endY = centerY + Math.sin(angle) * length;
+                        
+                        ctx.strokeStyle = `${theme.colors.primary}${hexPadded}`;
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(startX, startY);
+                        ctx.lineTo(endX, endY);
+                        ctx.stroke();
+                    }
+                    
+                    timeRef.current += 1;
+                    animationRef.current = requestAnimationFrame(animate);
+                };
+                
+                resizeCanvas();
+                animate();
+                window.addEventListener('resize', resizeCanvas);
+                
+                return () => {
+                    window.removeEventListener('resize', resizeCanvas);
+                    if (animationRef.current) {
+                        cancelAnimationFrame(animationRef.current);
+                    }
+                };
+            }, [theme, variant]);
+            
+            return (
+                <div style={{ height: `${height}px`, border: `1px solid ${theme.colors.border}`, borderRadius: '8px', overflow: 'hidden' }}>
+                    <canvas 
+                        ref={canvasRef}
+                        style={{
+                            width: '100%',
+                            height: '100%',
+                            background: theme.colors.surface
+                        }}
+                    />
+                </div>
+            );
+        };
+
         const ModalDrawerDemo = () => {
             const [modalOpen, setModalOpen] = React.useState(false);
             const [drawerOpen, setDrawerOpen] = React.useState(false);
@@ -1872,32 +1963,14 @@
                             </div>
                             <div style={{ marginBottom: '20px' }}>
                                 <h4 style={{ color: theme.colors.text, marginBottom: '8px' }}>Zen Variant</h4>
-                                <div style={{ height: '300px', border: `1px solid ${theme.colors.border}`, borderRadius: '8px', overflow: 'hidden' }}>
-                                    <canvas 
-                                        ref={React.useRef()}
-                                        style={{
-                                            width: '100%',
-                                            height: '100%',
-                                            background: theme.colors.surface
-                                        }}
-                                    />
-                                </div>
+                                <DynamicCanvasDemo variant="zen" height={300} />
                                 <p style={{ color: theme.colors.textSecondary, fontSize: '14px', marginTop: '8px' }}>
                                     Canvas animado com padrões geométricos zen e texto dinâmico. Ideal para telas de boas-vindas.
                                 </p>
                             </div>
                             <div style={{ marginBottom: '20px' }}>
                                 <h4 style={{ color: theme.colors.text, marginBottom: '8px' }}>Loading Variant</h4>
-                                <div style={{ height: '200px', border: `1px solid ${theme.colors.border}`, borderRadius: '8px', overflow: 'hidden' }}>
-                                    <canvas 
-                                        ref={React.useRef()}
-                                        style={{
-                                            width: '100%',
-                                            height: '100%',
-                                            background: theme.colors.surface
-                                        }}
-                                    />
-                                </div>
+                                <DynamicCanvasDemo variant="loading" height={200} />
                                 <p style={{ color: theme.colors.textSecondary, fontSize: '14px', marginTop: '8px' }}>
                                     Versão otimizada para estados de carregamento com menos elementos e animação mais rápida.
                                 </p>
