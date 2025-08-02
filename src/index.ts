@@ -12,6 +12,7 @@ export { Button } from './components/Button';
 export { Card } from './components/Card';
 export { Container } from './components/Container';
 export { Checkbox } from './components/Checkbox';
+export { default as DynamicCanvas } from './components/DynamicCanvas';
 export { Collapse } from './components/Collapse';
 export { Divider } from './components/Divider';
 export { Drawer } from './components/Drawer';

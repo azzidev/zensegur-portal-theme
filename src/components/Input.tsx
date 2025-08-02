@@ -30,7 +30,7 @@ export const Input: InputInterface = ({
 
   const inputStyle: React.CSSProperties = {
     width: '100%',
-    height: '14px',
+    height: '42px',
     padding: '16px',
     borderRadius: '12px',
     border: `1px solid ${theme.colors.border}`,
