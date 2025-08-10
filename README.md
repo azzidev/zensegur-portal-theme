@@ -302,14 +302,6 @@ function Dashboard() {
 }
 ```
 
-## 🤝 Contribuição
-
-1. Fork o projeto
-2. Crie uma branch: `git checkout -b feature/nova-feature`
-3. Commit: `git commit -m 'Add nova feature'`
-4. Push: `git push origin feature/nova-feature`
-5. Abra um Pull Request
-
 ## 📄 Licença
 
 MIT © ZenSegur
@@ -322,5 +314,5 @@ MIT © ZenSegur
 
 ---
 
-**Versão:** 1.3.5  
-**Última atualização:** Janeiro 2025
+**Versão:** 1.4.6  
+**Última atualização:** Agosto 2025
