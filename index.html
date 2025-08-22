@@ -1394,8 +1394,68 @@
                             <h1 style={{ color: theme.colors.primary, marginBottom: '8px' }}>
                                 Zensegur Theme System
                             </h1>
-                            <p style={{ color: theme.colors.textSecondary }}>
-                                Exemplos dos componentes do sistema de tema
+                            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap', marginTop: '16px' }}>
+                                <a href="https://www.npmjs.com/package/zensegur-theme" target="_blank" style={{
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: '8px',
+                                    padding: '8px 16px',
+                                    backgroundColor: '#CB3837',
+                                    color: 'white',
+                                    textDecoration: 'none',
+                                    borderRadius: '6px',
+                                    fontSize: '14px',
+                                    fontWeight: 500,
+                                    transition: 'all 0.2s ease'
+                                }}>
+                                    📦 NPM v1.4.7
+                                </a>
+                                <a href="https://github.com/azzidev" target="_blank" style={{
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: '8px',
+                                    padding: '8px 16px',
+                                    backgroundColor: '#333',
+                                    color: 'white',
+                                    textDecoration: 'none',
+                                    borderRadius: '6px',
+                                    fontSize: '14px',
+                                    fontWeight: 500,
+                                    transition: 'all 0.2s ease'
+                                }}>
+                                    👨‍💻 @azzidev
+                                </a>
+                                <a href="https://github.com/azzidev/zensegur-portal-theme" target="_blank" style={{
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: '8px',
+                                    padding: '8px 16px',
+                                    backgroundColor: '#24292e',
+                                    color: 'white',
+                                    textDecoration: 'none',
+                                    borderRadius: '6px',
+                                    fontSize: '14px',
+                                    fontWeight: 500,
+                                    transition: 'all 0.2s ease'
+                                }}>
+                                    ⭐ GitHub Repo
+                                </a>
+                                <div style={{
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: '8px',
+                                    padding: '8px 16px',
+                                    backgroundColor: theme.colors.success,
+                                    color: 'white',
+                                    borderRadius: '6px',
+                                    fontSize: '14px',
+                                    fontWeight: 500
+                                }}>
+                                    🚀 30+ Components
+                                </div>
+                            </div>
+                            <p style={{ color: theme.colors.textSecondary, textAlign: 'center', marginTop: '16px', fontSize: '14px' }}>
+                                Sistema de temas unificado para microfrontends React com TypeScript
                             </p>
                         </div>
 
@@ -1687,7 +1747,7 @@
                                 <Avatar size={32}>U</Avatar>
                                 <Avatar size={40}>AB</Avatar>
                                 <Avatar size={64}>ZS</Avatar>
-                                <Avatar size={80} src="https://via.placeholder.com/80" />
+                                <Avatar size={80} src="https://picsum.photos/80" />
                             </div>
                         </div>
 
@@ -1921,7 +1981,7 @@
                         </div>
 
                         <div className="section" style={{ backgroundColor: theme.colors.surface }}>
-                            <h2 style={{ color: theme.colors.text, marginBottom: '20px' }}>Image Enhanced</h2>
+                            <h2 style={{ color: theme.colors.text, marginBottom: '20px' }}>Image Preview e Carousel</h2>
                             <div style={{ marginBottom: '16px', padding: '12px', backgroundColor: theme.colors.background, borderRadius: '6px' }}>
                                 <code style={{ color: theme.colors.text, fontSize: '12px' }}>
                                     src: string | string[] • preview?: boolean • carousel?: boolean • fallback?: string • placeholder?: React.ReactNode • loading states
@@ -1931,13 +1991,13 @@
                                 <h4 style={{ color: theme.colors.text, marginBottom: '8px' }}>Single Image with Preview</h4>
                                 <div style={{ marginBottom: '12px' }}>
                                     <div style={{ position: 'relative', display: 'inline-block', cursor: 'pointer' }}>
-                                        <img src="https://via.placeholder.com/200x150" alt="Preview example" style={{ borderRadius: '4px' }} />
+                                        <img src="https://picsum.photos/200/150" alt="Preview example" style={{ borderRadius: '4px' }} />
                                         <div style={{ position: 'absolute', top: '8px', right: '8px', background: 'rgba(0,0,0,0.6)', color: 'white', padding: '4px 8px', borderRadius: '4px', fontSize: '12px' }}>🔍 Click to preview</div>
                                     </div>
                                 </div>
                                 <h4 style={{ color: theme.colors.text, marginBottom: '8px' }}>Carousel Gallery</h4>
                                 <div style={{ position: 'relative', display: 'inline-block' }}>
-                                    <img src="https://via.placeholder.com/300x200/E86412/FFFFFF?text=Image+1" alt="Carousel example" style={{ borderRadius: '4px' }} />
+                                    <img src="https://picsum.photos/300/200" alt="Carousel example" style={{ borderRadius: '4px' }} />
                                     <button style={{ position: 'absolute', left: '8px', top: '50%', transform: 'translateY(-50%)', background: 'rgba(0,0,0,0.6)', color: 'white', border: 'none', borderRadius: '50%', width: '32px', height: '32px', cursor: 'pointer', fontSize: '18px' }}>‹</button>
                                     <button style={{ position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%)', background: 'rgba(0,0,0,0.6)', color: 'white', border: 'none', borderRadius: '50%', width: '32px', height: '32px', cursor: 'pointer', fontSize: '18px' }}>›</button>
                                     <div style={{ position: 'absolute', bottom: '8px', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: '4px' }}>
@@ -1988,7 +2048,7 @@
                                 </code>
                             </div>
                             <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-                                <Image src="https://via.placeholder.com/150" alt="Exemplo" width={150} height={150} />
+                                <Image src="https://picsum.photos/150" alt="Exemplo" width={150} height={150} />
                                 <Image 
                                     src="invalid-url" 
                                     alt="Com fallback" 
