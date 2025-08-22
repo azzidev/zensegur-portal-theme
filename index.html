@@ -1860,6 +1860,99 @@
                         </div>
 
                         <div className="section" style={{ backgroundColor: theme.colors.surface }}>
+                            <h2 style={{ color: theme.colors.text, marginBottom: '20px' }}>Grid System (Row & Col)</h2>
+                            <div style={{ marginBottom: '16px', padding: '12px', backgroundColor: theme.colors.background, borderRadius: '6px' }}>
+                                <code style={{ color: theme.colors.text, fontSize: '12px' }}>
+                                    Row: gutter?: number | [number, number] • justify?: 'start' | 'end' | 'center' | 'space-between' • align?: 'top' | 'middle' | 'bottom'&lt;br/&gt;
+                                    Col: span?: number • xs?: number • sm?: number • md?: number • lg?: number • xl?: number • xxl?: number
+                                </code>
+                            </div>
+                            <div style={{ marginBottom: '20px' }}>
+                                <h4 style={{ color: theme.colors.text, marginBottom: '8px' }}>Responsive Grid</h4>
+                                <div style={{ border: `1px solid ${theme.colors.border}`, borderRadius: '6px', padding: '16px' }}>
+                                    <div style={{ display: 'flex', flexWrap: 'wrap', marginLeft: '-8px', marginRight: '-8px', rowGap: '16px' }}>
+                                        <div style={{ paddingLeft: '8px', paddingRight: '8px', width: '100%' }}>
+                                            <div style={{ padding: '12px', backgroundColor: theme.colors.primary, color: theme.colors.surface, borderRadius: '4px', textAlign: 'center' }}>Col 24 (100%)</div>
+                                        </div>
+                                        <div style={{ paddingLeft: '8px', paddingRight: '8px', width: '50%' }}>
+                                            <div style={{ padding: '12px', backgroundColor: theme.colors.success, color: theme.colors.surface, borderRadius: '4px', textAlign: 'center' }}>Col 12 (50%)</div>
+                                        </div>
+                                        <div style={{ paddingLeft: '8px', paddingRight: '8px', width: '50%' }}>
+                                            <div style={{ padding: '12px', backgroundColor: theme.colors.success, color: theme.colors.surface, borderRadius: '4px', textAlign: 'center' }}>Col 12 (50%)</div>
+                                        </div>
+                                        <div style={{ paddingLeft: '8px', paddingRight: '8px', width: '33.33%' }}>
+                                            <div style={{ padding: '12px', backgroundColor: theme.colors.warning, color: theme.colors.surface, borderRadius: '4px', textAlign: 'center' }}>Col 8 (33%)</div>
+                                        </div>
+                                        <div style={{ paddingLeft: '8px', paddingRight: '8px', width: '33.33%' }}>
+                                            <div style={{ padding: '12px', backgroundColor: theme.colors.warning, color: theme.colors.surface, borderRadius: '4px', textAlign: 'center' }}>Col 8 (33%)</div>
+                                        </div>
+                                        <div style={{ paddingLeft: '8px', paddingRight: '8px', width: '33.33%' }}>
+                                            <div style={{ padding: '12px', backgroundColor: theme.colors.warning, color: theme.colors.surface, borderRadius: '4px', textAlign: 'center' }}>Col 8 (33%)</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p style={{ color: theme.colors.textSecondary, fontSize: '14px', marginTop: '8px' }}>
+                                    Sistema de grid de 24 colunas com breakpoints responsivos: xs (≤575px), sm (≥576px), md (≥768px), lg (≥992px), xl (≥1200px), xxl (≥1600px)
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="section" style={{ backgroundColor: theme.colors.surface }}>
+                            <h2 style={{ color: theme.colors.text, marginBottom: '20px' }}>Space</h2>
+                            <div style={{ marginBottom: '16px', padding: '12px', backgroundColor: theme.colors.background, borderRadius: '6px' }}>
+                                <code style={{ color: theme.colors.text, fontSize: '12px' }}>
+                                    direction?: 'horizontal' | 'vertical' • size?: 'small' | 'middle' | 'large' | number • align?: 'start' | 'end' | 'center' • wrap?: boolean • split?: React.ReactNode
+                                </code>
+                            </div>
+                            <div style={{ marginBottom: '20px' }}>
+                                <h4 style={{ color: theme.colors.text, marginBottom: '8px' }}>Horizontal Space</h4>
+                                <div style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
+                                    <Button type="primary">Button 1</Button>
+                                    <Button type="secondary">Button 2</Button>
+                                    <Button type="primary">Button 3</Button>
+                                </div>
+                                <h4 style={{ color: theme.colors.text, marginBottom: '8px' }}>Vertical Space</h4>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', maxWidth: '200px' }}>
+                                    <Input placeholder="Input 1" />
+                                    <Input placeholder="Input 2" />
+                                    <Button type="primary">Submit</Button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="section" style={{ backgroundColor: theme.colors.surface }}>
+                            <h2 style={{ color: theme.colors.text, marginBottom: '20px' }}>Image Enhanced</h2>
+                            <div style={{ marginBottom: '16px', padding: '12px', backgroundColor: theme.colors.background, borderRadius: '6px' }}>
+                                <code style={{ color: theme.colors.text, fontSize: '12px' }}>
+                                    src: string | string[] • preview?: boolean • carousel?: boolean • fallback?: string • placeholder?: React.ReactNode • loading states
+                                </code>
+                            </div>
+                            <div style={{ marginBottom: '20px' }}>
+                                <h4 style={{ color: theme.colors.text, marginBottom: '8px' }}>Single Image with Preview</h4>
+                                <div style={{ marginBottom: '12px' }}>
+                                    <div style={{ position: 'relative', display: 'inline-block', cursor: 'pointer' }}>
+                                        <img src="https://via.placeholder.com/200x150" alt="Preview example" style={{ borderRadius: '4px' }} />
+                                        <div style={{ position: 'absolute', top: '8px', right: '8px', background: 'rgba(0,0,0,0.6)', color: 'white', padding: '4px 8px', borderRadius: '4px', fontSize: '12px' }}>🔍 Click to preview</div>
+                                    </div>
+                                </div>
+                                <h4 style={{ color: theme.colors.text, marginBottom: '8px' }}>Carousel Gallery</h4>
+                                <div style={{ position: 'relative', display: 'inline-block' }}>
+                                    <img src="https://via.placeholder.com/300x200/E86412/FFFFFF?text=Image+1" alt="Carousel example" style={{ borderRadius: '4px' }} />
+                                    <button style={{ position: 'absolute', left: '8px', top: '50%', transform: 'translateY(-50%)', background: 'rgba(0,0,0,0.6)', color: 'white', border: 'none', borderRadius: '50%', width: '32px', height: '32px', cursor: 'pointer', fontSize: '18px' }}>‹</button>
+                                    <button style={{ position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%)', background: 'rgba(0,0,0,0.6)', color: 'white', border: 'none', borderRadius: '50%', width: '32px', height: '32px', cursor: 'pointer', fontSize: '18px' }}>›</button>
+                                    <div style={{ position: 'absolute', bottom: '8px', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: '4px' }}>
+                                        <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'white' }}></div>
+                                        <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'rgba(255,255,255,0.5)' }}></div>
+                                        <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'rgba(255,255,255,0.5)' }}></div>
+                                    </div>
+                                </div>
+                                <p style={{ color: theme.colors.textSecondary, fontSize: '14px', marginTop: '8px' }}>
+                                    Suporte a preview em modal, carousel com navegação, loading states, fallback para erros e navegação por teclado (setas e ESC)
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="section" style={{ backgroundColor: theme.colors.surface }}>
                             <h2 style={{ color: theme.colors.text, marginBottom: '20px' }}>Container</h2>
                             <div style={{ marginBottom: '16px', padding: '12px', backgroundColor: theme.colors.background, borderRadius: '6px' }}>
                                 <code style={{ color: theme.colors.text, fontSize: '12px' }}>
