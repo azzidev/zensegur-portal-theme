@@ -178,44 +178,6 @@ function AppWithAntd() {
 }
 ```
 
-## 🔧 Desenvolvimento
-
-### Estrutura do Projeto
-
-```
-src/
-├── components/          # Componentes React
-│   ├── Button.tsx
-│   ├── Card.tsx
-│   └── ...
-├── config.ts           # Configuração de tema
-├── context.tsx         # Context do tema
-├── semantic-colors.ts  # Definições de cores
-├── types.ts           # Tipos TypeScript
-└── index.ts           # Exports principais
-```
-
-### Scripts Disponíveis
-
-```bash
-npm run build          # Compilar TypeScript
-npm run prepublishOnly # Preparar para publicação
-```
-
-### Versionamento
-
-Para criar uma nova versão:
-
-```bash
-# Atualizar version no package.json
-npm version patch|minor|major
-
-# Criar tag e fazer push
-git push origin v1.3.6
-```
-
-O GitHub Actions automaticamente publica no NPM quando uma tag é criada.
-
 ## 🏗️ Arquitetura para Microfrontends
 
 ### Compartilhamento entre MFEs
@@ -373,5 +335,5 @@ MIT © ZenSegur
 
 ---
 
-**Versão:** 1.5.0  
-**Última atualização:** Janeiro 2025
+**Versão:** 1.4.7  
+**Última atualização:** Agosto 2025
