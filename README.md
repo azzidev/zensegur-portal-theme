@@ -71,7 +71,10 @@ function Header() {
 
 ### Layout & Estrutura
 - `Container` - Container responsivo
+- `Row` - Sistema de grid responsivo
+- `Col` - Colunas com breakpoints (xs, sm, md, lg, xl, xxl)
 - `Flex` - Layout flexível
+- `Space` - Espaçamento consistente
 - `Divider` - Separador visual
 - `Card` - Cartão de conteúdo
 
@@ -96,7 +99,7 @@ function Header() {
 - `Tag` - Etiqueta/rótulo
 - `Badge` - Distintivo numérico
 - `Avatar` - Foto de perfil
-- `Image` - Imagem otimizada
+- `Image` - Imagem com preview, carousel e loading
 - `Typography` - Tipografia padronizada
 
 ### Feedback & Status
@@ -245,28 +248,84 @@ O tema é sincronizado automaticamente via localStorage entre todos os MFEs.
 
 ## 📚 Exemplos
 
+### Grid Responsivo
+
+```tsx
+import { Row, Col, Card } from 'zensegur-theme';
+
+function ResponsiveGrid() {
+  return (
+    <Row gutter={[16, 16]}>
+      <Col xs={24} sm={12} md={8} lg={6}>
+        <Card title="Mobile: 100%">Conteúdo 1</Card>
+      </Col>
+      <Col xs={24} sm={12} md={8} lg={6}>
+        <Card title="Tablet: 50%">Conteúdo 2</Card>
+      </Col>
+      <Col xs={24} sm={12} md={8} lg={6}>
+        <Card title="Desktop: 33%">Conteúdo 3</Card>
+      </Col>
+    </Row>
+  );
+}
+```
+
+### Image com Preview e Carousel
+
+```tsx
+import { Image, Space } from 'zensegur-theme';
+
+function ImageGallery() {
+  const images = [
+    '/img1.jpg',
+    '/img2.jpg', 
+    '/img3.jpg'
+  ];
+
+  return (
+    <Space direction="vertical" size="large">
+      <Image 
+        src={images}
+        preview={true}
+        carousel={true}
+        width={400}
+        height={300}
+      />
+      <Image 
+        src="/single-image.jpg"
+        preview={true}
+        width={200}
+        height={150}
+      />
+    </Space>
+  );
+}
+```
+
 ### Formulário Completo
 
 ```tsx
-import { Form, Input, Button, Card, Alert } from 'zensegur-theme';
+import { Form, Input, Button, Card, Alert, Space } from 'zensegur-theme';
 
 function LoginForm() {
   return (
     <Card title="Login">
       <Form onSubmit={handleSubmit}>
-        <Input 
-          placeholder="Email" 
-          type="email" 
-          required 
-        />
-        <Input 
-          placeholder="Senha" 
-          type="password" 
-          required 
-        />
-        <Button type="primary" htmlType="submit">
-          Entrar
-        </Button>
+        <Space direction="vertical" size="middle">
+          <Input 
+            placeholder="Email" 
+            type="email" 
+            required 
+          />
+          <Input 
+            placeholder="Senha" 
+            type="password" 
+            required 
+          />
+          <Button type="primary" htmlType="submit">
+            Entrar
+          </Button>
+        </Space>
       </Form>
     </Card>
   );
@@ -314,5 +373,5 @@ MIT © ZenSegur
 
 ---
 
-**Versão:** 1.4.6  
-**Última atualização:** Agosto 2025
+**Versão:** 1.5.0  
+**Última atualização:** Janeiro 2025
