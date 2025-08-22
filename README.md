@@ -7,7 +7,7 @@ Sistema de temas unificado para microfrontends do ZenSegur Portal, fornecendo co
 - **30+ Componentes React** prontos para uso
 - **Sistema de cores semânticas** com suporte a tema claro/escuro
 - **TypeScript** com tipagem completa
-- **Compatível com Ant Design** 
+- **Compatível com Ant Design**
 - **Persistência automática** do tema selecionado
 - **Otimizado para microfrontends**
 
@@ -70,6 +70,7 @@ function Header() {
 ## 🎯 Componentes Disponíveis
 
 ### Layout & Estrutura
+
 - `Container` - Container responsivo
 - `Row` - Sistema de grid responsivo
 - `Col` - Colunas com breakpoints (xs, sm, md, lg, xl, xxl)
@@ -79,6 +80,7 @@ function Header() {
 - `Card` - Cartão de conteúdo
 
 ### Formulários
+
 - `Input` - Campo de entrada
 - `InputMask` - Campo com máscara
 - `Select` - Seleção dropdown
@@ -87,6 +89,7 @@ function Header() {
 - `Form` - Formulário estruturado
 
 ### Navegação & Interação
+
 - `Button` - Botão de ação
 - `Link` - Link navegável
 - `Dropdown` - Menu suspenso
@@ -95,6 +98,7 @@ function Header() {
 - `Drawer` - Painel lateral
 
 ### Exibição de Dados
+
 - `Table` - Tabela de dados
 - `Tag` - Etiqueta/rótulo
 - `Badge` - Distintivo numérico
@@ -103,6 +107,7 @@ function Header() {
 - `Typography` - Tipografia padronizada
 
 ### Feedback & Status
+
 - `Alert` - Alertas e notificações
 - `Toast` - Notificações temporárias
 - `Progress` - Barra de progresso
@@ -112,6 +117,7 @@ function Header() {
 - `Empty` - Estado vazio
 
 ### Utilitários
+
 - `Collapse` - Conteúdo recolhível
 - `DynamicCanvas` - Canvas dinâmico
 
@@ -183,11 +189,13 @@ function AppWithAntd() {
 ### Compartilhamento entre MFEs
 
 1. **Instalar em cada MFE:**
+
 ```bash
 npm install zensegur-theme
 ```
 
 2. **Configurar no root de cada MFE:**
+
 ```tsx
 import { ThemeProvider } from 'zensegur-theme';
 
@@ -198,7 +206,7 @@ import { ThemeProvider } from 'zensegur-theme';
 ```
 
 3. **Sincronização automática:**
-O tema é sincronizado automaticamente via localStorage entre todos os MFEs.
+   O tema é sincronizado automaticamente via localStorage entre todos os MFEs.
 
 ### Benefícios
 
@@ -314,7 +322,7 @@ function Dashboard() {
         <h1>Dashboard - Modo {mode}</h1>
         <ThemeToggle />
       </header>
-      
+    
       <Card title="Estatísticas">
         <p>Conteúdo do dashboard...</p>
       </Card>
@@ -335,5 +343,5 @@ MIT © ZenSegur
 
 ---
 
-**Versão:** 1.4.7  
+**Versão:** 1.4.8
 **Última atualização:** Agosto 2025
