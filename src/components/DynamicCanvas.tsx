@@ -215,23 +215,36 @@ const DynamicCanvas: React.FC<DynamicCanvasProps> = ({
     resizeCanvas();
     
     let resizeTimeout: any;
-    const resizeObserver = new ResizeObserver(() => {
+    
+    // Enhanced resize handling
+    const handleResize = () => {
       clearTimeout(resizeTimeout);
       resizeTimeout = setTimeout(() => {
         resizeCanvas();
-      }, 16);
-    });
+      }, 100);
+    };
     
+    // ResizeObserver for container changes
+    const resizeObserver = new ResizeObserver(handleResize);
     resizeObserver.observe(canvas.parentElement || canvas);
     
-    drawGeometricPattern();
+    // Window resize listener
+    window.addEventListener('resize', handleResize);
     
-    window.addEventListener('resize', resizeCanvas);
+    // Media query listener for mobile/desktop transitions
+    const mediaQuery = window.matchMedia('(max-width: 768px)');
+    const handleMediaChange = () => {
+      setTimeout(handleResize, 200);
+    };
+    mediaQuery.addListener(handleMediaChange);
+    
+    drawGeometricPattern();
 
     return () => {
       clearTimeout(resizeTimeout);
       resizeObserver.disconnect();
-      window.removeEventListener('resize', resizeCanvas);
+      window.removeEventListener('resize', handleResize);
+      mediaQuery.removeListener(handleMediaChange);
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }
