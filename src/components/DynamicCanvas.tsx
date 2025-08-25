@@ -32,6 +32,7 @@ const DynamicCanvas: React.FC<DynamicCanvasProps> = ({
   const wordIndexRef = useRef(0);
   const wordTimeRef = useRef(0);
   const wordOpacityRef = useRef(0);
+  const [forceRender, setForceRender] = React.useState(0);
   
   const calculateReadingTime = (word: string): number => {
     const baseTime = variant === 'loading' ? 60 : 80;
@@ -216,11 +217,12 @@ const DynamicCanvas: React.FC<DynamicCanvasProps> = ({
     
     let resizeTimeout: any;
     
-    // Enhanced resize handling
+    // Enhanced resize handling with force re-render
     const handleResize = () => {
       clearTimeout(resizeTimeout);
       resizeTimeout = setTimeout(() => {
         resizeCanvas();
+        setForceRender(prev => prev + 1);
       }, 100);
     };
     
@@ -249,10 +251,11 @@ const DynamicCanvas: React.FC<DynamicCanvasProps> = ({
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [theme, words, showWords, variant]);
+  }, [theme, words, showWords, variant, forceRender]);
 
   return (
     <canvas
+      key={forceRender}
       ref={canvasRef}
       className={className}
       style={{
