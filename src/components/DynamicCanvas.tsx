@@ -32,8 +32,6 @@ const DynamicCanvas: React.FC<DynamicCanvasProps> = ({
   const wordIndexRef = useRef(0);
   const wordTimeRef = useRef(0);
   const wordOpacityRef = useRef(0);
-  const [forceRender, setForceRender] = React.useState(0);
-  
   const calculateReadingTime = (word: string): number => {
     const baseTime = variant === 'loading' ? 60 : 80;
     const charTime = word.length * (variant === 'loading' ? 8 : 10);
@@ -53,13 +51,8 @@ const DynamicCanvas: React.FC<DynamicCanvasProps> = ({
 
     const resizeCanvas = () => {
       const rect = canvas.getBoundingClientRect();
-      const newWidth = rect.width;
-      const newHeight = rect.height;
-      
-      if (canvas.width !== newWidth || canvas.height !== newHeight) {
-        canvas.width = newWidth;
-        canvas.height = newHeight;
-      }
+      canvas.width = rect.width;
+      canvas.height = rect.height;
     };
 
     const drawGeometricPattern = () => {
@@ -214,48 +207,24 @@ const DynamicCanvas: React.FC<DynamicCanvasProps> = ({
     };
 
     resizeCanvas();
-    
-    let resizeTimeout: any;
-    
-    // Enhanced resize handling with force re-render
-    const handleResize = () => {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(() => {
-        resizeCanvas();
-        setForceRender(prev => prev + 1);
-      }, 100);
-    };
-    
-    // ResizeObserver for container changes
-    const resizeObserver = new ResizeObserver(handleResize);
-    resizeObserver.observe(canvas.parentElement || canvas);
-    
-    // Window resize listener
-    window.addEventListener('resize', handleResize);
-    
-    // Media query listener for mobile/desktop transitions
-    const mediaQuery = window.matchMedia('(max-width: 768px)');
-    const handleMediaChange = () => {
-      setTimeout(handleResize, 200);
-    };
-    mediaQuery.addListener(handleMediaChange);
-    
     drawGeometricPattern();
 
+    const handleResize = () => {
+      resizeCanvas();
+    };
+
+    window.addEventListener('resize', handleResize);
+
     return () => {
-      clearTimeout(resizeTimeout);
-      resizeObserver.disconnect();
       window.removeEventListener('resize', handleResize);
-      mediaQuery.removeListener(handleMediaChange);
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [theme, words, showWords, variant, forceRender]);
+  }, [theme, words, showWords, variant]);
 
   return (
     <canvas
-      key={forceRender}
       ref={canvasRef}
       className={className}
       style={{
