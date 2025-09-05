@@ -32,6 +32,7 @@ const DynamicCanvas: React.FC<DynamicCanvasProps> = ({
   const wordIndexRef = useRef(0);
   const wordTimeRef = useRef(0);
   const wordOpacityRef = useRef(0);
+  const drawFunctionRef = useRef<() => void>();
   const calculateReadingTime = (word: string): number => {
     const baseTime = variant === 'loading' ? 60 : 80;
     const charTime = word.length * (variant === 'loading' ? 8 : 10);
@@ -206,11 +207,16 @@ const DynamicCanvas: React.FC<DynamicCanvasProps> = ({
       animationFrameRef.current = requestAnimationFrame(drawGeometricPattern);
     };
 
+    drawFunctionRef.current = drawGeometricPattern;
+    
     resizeCanvas();
     drawGeometricPattern();
 
     const handleResize = () => {
       resizeCanvas();
+      if (drawFunctionRef.current) {
+        drawFunctionRef.current();
+      }
     };
 
     window.addEventListener('resize', handleResize);
